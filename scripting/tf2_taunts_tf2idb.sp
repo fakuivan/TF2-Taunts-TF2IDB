@@ -29,7 +29,7 @@
 
 public Plugin myinfo = 
 {
-	name = "TF2 Taunt Menu",
+	name = "TF2 Taunts TF2IDB",
 	author = "fakuivan",
 	description = "An extensible taunt menu that updates along with tf2idb",
 	version = PLUGIN_VERSION,
@@ -54,8 +54,6 @@ enum TauntExecution {
 
 public void OnPluginStart()
 {
-	//CreateConVar("sm__version", PLUGIN_VERSION, "Version of ", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	
 #if defined _tf2idb_included //{
 	CTauntCacheSystem_FromTF2IDB_Error i_error;
 	gh_cache = CTauntCacheSystem.FromTF2IDB();
@@ -75,6 +73,8 @@ public void OnPluginStart()
 		SetFailState("Unable to load gamedata/tf2.tauntem.txt.");
 	}
 	gh_enforcer = new CTauntEnforcer(h_conf);
+	
+	CreateConVar("sm_tf2_taunts_tf2idb_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 	
 	LoadTranslations("common.phrases");
 	LoadTranslations("tf2.taunts.tf2idb");
