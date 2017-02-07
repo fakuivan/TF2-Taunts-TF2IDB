@@ -43,7 +43,7 @@ script:
     - $COMPILE_SCRIPTING_FOLDER/spcomp $COMPILE_SCRIPTING_FOLDER/tf2_taunts_tf2idb.sp -o$TRAVIS_BUILD_DIR/plugins/tf2_taunts_tf2idb.smx $EXTRA_ARGS
 
 before_deploy:
-    - zip -r $FILE $TRAVIS_BUILD_DIR/translations/ $TRAVIS_BUILD_DIR/plugins/ $TRAVIS_BUILD_DIR/scripting/ $TRAVIS_BUILD_DIR/gamedata/
+    - zip -r $FILE ./translations/ ./plugins/ ./scripting/ ./gamedata/
 
 deploy:
     provider: releases
