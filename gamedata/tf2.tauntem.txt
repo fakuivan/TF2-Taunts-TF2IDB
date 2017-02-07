@@ -1,0 +1,18 @@
+"Games"
+{
+	/* Team Fortress 2 */
+	"tf"
+	{
+		"Signatures"
+		{
+			"CTFPlayer::PlayTauntSceneFromItem"
+			{
+				"library"			"server"
+				"windows"			"\x55\x8B\xEC\x81\xEC\x0C\x01\x00\x00\x53\x8B\x5D\x08\x57\x8B"
+				"linux"				"@_ZN9CTFPlayer22PlayTauntSceneFromItemEP13CEconItemView"
+				"mac"				"@_ZN9CTFPlayer22PlayTauntSceneFromItemEP13CEconItemView"
+			}
+		}
+	}
+}
+

@@ -1,0 +1,62 @@
+﻿"Phrases"
+{
+	"tf2_taunts_tf2idb__menu__title"
+	{
+		"es"		"Burlas:"
+	}
+    
+	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
+	{
+		"es"		"Burlas"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForClassX"
+	{
+		"es"		"Burlas para clase %s"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForAllClasses"
+	{
+		"es"		"Burlas disponibles para todas las clases"
+	}
+	"tf2_taunts_tf2idb__taunts_list__AllClass"
+	{
+		"es"		"Todas"
+	}
+    
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClient"
+	{
+		"es"		"No puedes hacer burlas desde la consola del servidor."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned"
+	{
+		"es"		"Únete a un equipo para poder hacer burlas."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator"
+	{
+		"es"		"No puedes hacer burlas como espectador."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClass"
+	{
+		"es"		"Únete a una clase para poder hacer burlas."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TargetIsDead"
+	{
+		"es"		"No puedes hacer burlas estando muerto."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__WrongClass"
+	{
+		"es"		"Burla no disponible para esta clase."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__IvalidIDX"
+	{
+		"es"		"\"Item Definition Index\" no válido o el ítem no es una burla."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TauntFailed"
+	{
+		"es"		"No se pudo ejecutar la burla."
+	}
+    
+	"tf2_taunts_tf2idb__commands__Usage"
+	{
+		"es"		"Uso"
+	}
+}

@@ -1,0 +1,62 @@
+"Phrases"
+{
+	"tf2_taunts_tf2idb__menu__title"
+	{
+		"en"		"Taunts:"
+	}
+
+	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
+	{
+		"en"		"Taunts"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForClassX"
+	{
+		"en"		"Taunts for class %s"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForAllClasses"
+	{
+		"en"		"All Class taunts"
+	}
+	"tf2_taunts_tf2idb__taunts_list__AllClass"
+	{
+		"en"		"All Class"
+	}
+    
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClient"
+	{
+		"en"		"You can't taunt from the server console."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned"
+	{
+		"en"		"Join a team to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator"
+	{
+		"en"		"You can't taunt from team Spectator."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClass"
+	{
+		"en"		"Join a class to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TargetIsDead"
+	{
+		"en"		"You must be alive to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__WrongClass"
+	{
+		"en"		"Taunt not avaliable for this class."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__IvalidIDX"
+	{
+		"en"		"Not a valid Item Definition Index or item is not a taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TauntFailed"
+	{
+		"en"		"Failed to execute taunt."
+	}
+    
+	"tf2_taunts_tf2idb__commands__Usage"
+	{
+		"en"		"Usage"
+	}
+}

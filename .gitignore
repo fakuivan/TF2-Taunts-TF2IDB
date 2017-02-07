@@ -1,0 +1,16 @@
+## SourcePawn Base gitignore
+
+## Ignore compiled plugins
+/plugins
+*.smx
+
+## If you are working with third party extensions/plugins.
+## You might want to uncomment this, unless your plugin is the one
+## that provides that functionality
+#/scripting/include/*.inc
+/scripting/include/tf2idb.inc
+/scripting/include/tf2items.inc
+/scripting/include/tf2itemsinfo.inc
+
+## Ignore autoversioning includes
+autoversioning.inc
