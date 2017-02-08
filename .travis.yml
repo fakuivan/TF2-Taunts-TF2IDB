@@ -52,6 +52,8 @@ deploy:
     file: $FILE
     skip_cleanup: true
     on:
+        #only deploy for the stable branch
+        condition: $SMVERSION = 1.8
         repo: fakuivan/TF2-Taunts-TF2IDB
         tags: true
 
