@@ -1,4 +1,3 @@
-//#define _USE_TF2II_INSTEAD_OF_TF2IDB
 #if defined _USE_TF2II_INSTEAD_OF_TF2IDB
  #define _USING_ITEMS_HELPER	"tf2ii"
  #include "tf2itemsinfo.inc"
@@ -64,7 +63,10 @@ public void OnPluginStart()
 #endif //}
 
 #if defined _tf2itemsinfo_included //{
-	gh_cache = CTauntCacheSystem.FromTF2II();
+	if (TF2II_IsItemSchemaPrecached())
+	{
+		gh_cache = CTauntCacheSystem.FromTF2II();
+	}
 #endif //}
 	
 	Handle h_conf = LoadGameConfigFile("tf2.tauntem");
@@ -87,6 +89,9 @@ public void OnPluginStart()
 
 public Action Command_ListTaunts(int i_client, int i_args)
 {
+#if defined _tf2itemsinfo_included //{
+	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
+#endif //}
 	ReplyToCommand(i_client, "[SM] %t:", "tf2_taunts_tf2idb__taunts_list__ListOfTaunts");
 	char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
 	char s_class[TF_MAX_CLASS_NAME_LENGTH];
@@ -116,6 +121,9 @@ public Action Command_ListTaunts(int i_client, int i_args)
 
 public Action Command_ForceToTaunt(int i_client, int i_args)
 {
+#if defined _tf2itemsinfo_included //{
+	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
+#endif //}
 	if (i_args == 0)
 	{
 		MenuMaker_TauntsMenu(i_client);
@@ -284,3 +292,29 @@ stock int GetCmdArgInt(int i_argnum, int i_length = 12, int i_base = 10)
 	GetCmdArg(i_argnum, s_buffer, i_length);
 	return StringToInt(s_buffer, i_base);
 }
+
+#if defined _tf2itemsinfo_included //{
+bool CheckAndReplyCacheNotLoaded(int i_client)
+{
+	if (gh_cache == INVALID_HANDLE)
+	{
+		ReplyToCommand(i_client, "[SM] Item schema cache not loaded yet, try again later.");
+		return true;
+	}
+	return false;
+}
+
+public int TF2II_OnItemSchemaUpdated()	//should this return ``void``?
+{
+	if (gh_cache == INVALID_HANDLE)
+	{
+		gh_cache = CTauntCacheSystem.FromTF2II();
+	}
+	else
+	{
+		gh_cache.CloseChild();
+		gh_cache.Close();
+		gh_cache = CTauntCacheSystem.FromTF2II();
+	}
+}
+#endif //}
