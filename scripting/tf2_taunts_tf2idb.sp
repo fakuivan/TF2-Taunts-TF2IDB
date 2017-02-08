@@ -18,12 +18,10 @@
 #include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
 #include "tf2_taunts_tf2idb/autoversioning.inc"
 
-//#define _USING_AUTOVERSIONING
-
 #if defined _autoversioning_included
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "_" ... _USING_ITEMS_HELPER
 #else
- #define PLUGIN_VERSION "1.0" ... "." ... "*" ... "_" ... _USING_ITEMS_HELPER
+ #define PLUGIN_VERSION "1.2" ... "." ... "*" ... "_" ... _USING_ITEMS_HELPER
 #endif
 
 public Plugin myinfo = 
@@ -92,6 +90,7 @@ public Action Command_ListTaunts(int i_client, int i_args)
 #if defined _tf2itemsinfo_included //{
 	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
 #endif //}
+	
 	ReplyToCommand(i_client, "[SM] %t:", "tf2_taunts_tf2idb__taunts_list__ListOfTaunts");
 	char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
 	char s_class[TF_MAX_CLASS_NAME_LENGTH];
