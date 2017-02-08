@@ -96,7 +96,7 @@ methodmap CTauntCacheSystem < ArrayList {
 		//for each taunt
 		for (int i_index = 0; i_index < i_nof_items; i_index++)
 		{
-			i_bfields[i_index] = TF2IDB_UsedByClasses(i_idxs[i_index]);
+			i_bfields[i_index] = TF2IDB_UsedByClasses_Compat(i_idxs[i_index]);
 			TF2IDB_GetItemName(i_idxs[i_index], s_names[i_index], i_name_maxlength);
 		}
 		
@@ -232,6 +232,31 @@ methodmap CTauntCacheSystem < ArrayList {
 		CloseHandle(GetArrayCellIndexAsAny(this, _CTauntCacheSystem_Storage_ClassesArrays));
 	}
 }
+
+#if defined _tf2idb_included //{
+//older versions of tf2idb don't include TF2IDB_UsedByClasses
+//this function gets around that restriction
+//if you know a better way to do this, let me know plz
+stock int TF2IDB_UsedByClasses_Compat(int i_id)
+{
+	char s_query[255 /* the query without the id is ~249 chars */ - 2 + 12];
+	
+	Format(s_query, sizeof(s_query), 
+		"SELECT replace(replace(replace(replace(replace(replace(replace(replace(replace(" ... 
+		"`class`, 'scout', 1), 'sniper', 2), 'soldier', 3), 'demoman', 4), 'medic', 5), 'heavy', 6), 'pyro', 7), 'spy', 8), 'engineer', 9) " ... 
+		"FROM `tf2idb_class` WHERE `id` IS %d",
+		i_id);
+	
+	ArrayList h_classes = view_as<ArrayList>(TF2IDB_FindItemCustom(s_query));
+	int i_bitmask;
+	
+	for (int i_iter = 0; i_iter < GetArraySize(h_classes); i_iter++)
+	{
+		i_bitmask |= (1 << GetArrayCell(h_classes, i_iter));
+	}
+	return i_bitmask;
+}
+#endif //}
 
 stock any GetArrayCellIndexAsAny(Handle array, any index, int block=0, bool asChar=false)
 {
