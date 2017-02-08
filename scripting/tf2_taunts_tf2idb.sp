@@ -1,4 +1,3 @@
-//#define _USE_TF2II_INSTEAD_OF_TF2IDB
 #if defined _USE_TF2II_INSTEAD_OF_TF2IDB
  #define _USING_ITEMS_HELPER	"tf2ii"
  #include "tf2itemsinfo.inc"
@@ -127,6 +126,12 @@ public Action Command_ForceToTaunt(int i_client, int i_args)
 #endif //}
 	if (i_args == 0)
 	{
+		TauntExecution i_result = CheckOnly(i_client);
+		if (i_result != TauntExecution_Success)
+		{
+			ReplyToTauntTarget(i_client, i_result);
+			return Plugin_Handled;
+		}
 		MenuMaker_TauntsMenu(i_client);
 	}
 	else if (i_args == 1)
@@ -237,7 +242,7 @@ void ReplyToTauntTarget(int i_target, TauntExecution i_result)
 	}
 }
 
-TauntExecution CheckAndTaunt(int i_target, int i_idx)
+TauntExecution CheckOnly(int i_target, TFClassType &i_class = TFClass_Unknown)
 {
 	if (!(i_target > 0 && i_target <= MaxClients))
 	{
@@ -255,7 +260,6 @@ TauntExecution CheckAndTaunt(int i_target, int i_idx)
 	{
 		return TauntExecution_ClientIsSpectator;
 	}
-	TFClassType i_class;
 	if ((i_class = TF2_GetPlayerClass(i_target)) == TFClass_Unknown)
 	{
 		return TauntExecution_InvalidClass;
@@ -264,6 +268,16 @@ TauntExecution CheckAndTaunt(int i_target, int i_idx)
 	{
 		return TauntExecution_TargetIsDead;
 	}
+	return TauntExecution_Success;
+}
+
+TauntExecution CheckAndTaunt(int i_target, int i_idx)
+{
+	TauntExecution i_check_only_result;
+	TFClassType i_class;
+	if ((i_check_only_result = CheckOnly(i_target, i_class)) != TauntExecution_Success) { return i_check_only_result; }
+	
+	i_class = TF2_GetPlayerClass(i_target);
 	int i_index;
 	if (!gh_cache.IsValidTaunt(i_idx, i_class, i_index))
 	{
