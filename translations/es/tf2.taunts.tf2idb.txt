@@ -5,6 +5,11 @@
 		"es"		"Burlas:"
 	}
     
+	"tf2_taunts_tf2idb__schema__Reply_NotCached"
+	{
+		"es"		"Esquema de items no cargado, intentalo mas tarde."
+	}
+    
 	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
 	{
 		"es"		"Burlas"

@@ -4,6 +4,11 @@
 	{
 		"en"		"Taunts:"
 	}
+    
+	"tf2_taunts_tf2idb__schema__Reply_NotCached"
+	{
+		"en"		"Item schema cache not loaded yet, try again later."
+	}
 
 	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
 	{

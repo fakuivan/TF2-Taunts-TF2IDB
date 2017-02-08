@@ -1,3 +1,4 @@
+//#define _USE_TF2II_INSTEAD_OF_TF2IDB
 #if defined _USE_TF2II_INSTEAD_OF_TF2IDB
  #define _USING_ITEMS_HELPER	"tf2ii"
  #include "tf2itemsinfo.inc"
@@ -298,7 +299,7 @@ bool CheckAndReplyCacheNotLoaded(int i_client)
 {
 	if (gh_cache == INVALID_HANDLE)
 	{
-		ReplyToCommand(i_client, "[SM] Item schema cache not loaded yet, try again later.");
+		ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__schema__Reply_NotCached");
 		return true;
 	}
 	return false;
