@@ -43,6 +43,7 @@ install:
     - wget https://raw.githubusercontent.com/asherkin/TF2Items/master/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
     - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/master/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
     - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/master/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
+    - wget https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc -O $COMPILE_SCRIPTING_FOLDER/include/updater.inc
     
     - COMMIT_NUMBER=$(git rev-list --count HEAD)
     - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
