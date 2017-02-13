@@ -88,6 +88,7 @@ deploy:
           #only deploy for the stable branch
           condition: $SMVERSION = 1.8
           repo: fakuivan/TF2-Taunts-TF2IDB
+          branch: master
           tags: true
         
     - provider: script
