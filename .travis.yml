@@ -49,7 +49,7 @@ install:
     - VERSION="$TAG.$COMMIT_NUMBER"
 
 before_script:
-    - python3 "$TRAVIS_BUILD_DIR/.buildtools/versioning/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
+    - python3.5 "$TRAVIS_BUILD_DIR/.buildtools/versioning/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
     - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
     - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
     - mkdir "$TRAVIS_BUILD_DIR/plugins"
