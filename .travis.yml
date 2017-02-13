@@ -65,8 +65,8 @@ before_deploy:
     - cd $TRAVIS_BUILD_DIR
     - PACKAGE_DIRS[0]="./plugins/"
     - PACKAGE_DIRS[1]="./scripting/" 
-    - PACKAGE_DIRS[1]="./translations/" 
-    - PACKAGE_DIRS[1]="./gamedata/" 
+    - PACKAGE_DIRS[2]="./translations/" 
+    - PACKAGE_DIRS[3]="./gamedata/" 
     - zip -r $FILE ${PACKAGE_DIRS[*]}
     
     - PACKAGE_PATH="$TRAVIS_BUILD_DIR/.package_updater"
