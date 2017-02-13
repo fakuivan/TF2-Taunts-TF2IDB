@@ -3,16 +3,30 @@ sudo: false
 
 # Install some apt packages needed for spcomp
 addons:
-    apt_packages:
-        - lib32stdc++6
-        - python3
+    apt:
+        sources: 
+            - deadsnakes
+        packages:
+            - lib32stdc++6
+            # We need at least python3.4 to run our custom deployment scripts
+            - python3.5
 
 # Set the build environment
 env:
-    - SMVERSION=1.8 CACHE_BUILDER=tf2idb
-    - SMVERSION=1.8 CACHE_BUILDER=tf2ii
-    - SMVERSION=1.9 CACHE_BUILDER=tf2idb
-    - SMVERSION=1.9 CACHE_BUILDER=tf2ii
+    global:
+        - PROJECT_SHORTNAME="tf2_taunts_tf2idb"
+        - UPDATER_REPO="sm_updater_plugins"
+        - UPDATER_USER="fakuivan"
+        - UPDATER_USER_NAME="$UPDATER_USER"
+        - UPDATER_USER_EMAIL="$UPDATER_USER@gmail.com"
+        - URL="https://github.com/$UPDATER_USER/TF2-Taunts-TF2IDB"
+        #UPDATER_REPO_OAUTH
+        - secure: "FMK6cgZ03UxVkQLMXdRQ/LqgCj0cqfTf5woPw8oewUYHNUKf/E+bzm40UJzg42POLUjcPj2S2JUMlChTyyAWGQ3vgOx75Z0zKGB22/r7IlOLMiX83v3Q+DP1Q+v+EVz+FUcDk9e8fo1KbHJUZVoeDeRNkLqdLFFZsUr9GoeBiufGSGBGi11Tg9C9+JoD7P/OfDtOcNcLVoUoo/ryQm34vD+Bg6ZENREeWaaexCOHIGuEns/gDSI6Jhk0tUNAIAzilDCZvd6fZX15EH6/HbS3Z9cs5lYqxOlqC/0LAGDgozIfXMONcygVwuxAclUUKQ2Z0+PWYYusxMjhXe8JJOz4mXX065HzyCIj62ZsWrNTQknaeRjPZgnPP+rJ+UGevv5l4Xghk2dWr+mrGS1mLx3htR/bTtd4oyomb4VAS/AxRM1A78pRbcyxM/1iuDVBVEkSR9KNmZ1aehtTnYncef+Q0YO7kRTKYcd752XAo/fv/4UGI83gW4tIu0CCmbmyWotbdPXxZVaIzgXFE5v4LrPCJ6lAQonWSL/dl7TTTp+tI5ow7KgoWM06xnuzn2xiNQR3rfKiA7GZK1Vy7sgOR9BfLJIV8s0lNGF4/xSIPYrJvKzayJsJxgCMdDj+O3nbBOzqjR1MbyiWxfAkrFLeHsSzolWPvl/ZXhLiptYnTT7MkI0="
+    matrix:
+        - SMVERSION=1.8 CACHE_BUILDER=tf2idb
+        - SMVERSION=1.8 CACHE_BUILDER=tf2ii
+        - SMVERSION=1.9 CACHE_BUILDER=tf2idb
+        - SMVERSION=1.9 CACHE_BUILDER=tf2ii
 
 # Allow the experimental branch to fail
 matrix:
@@ -25,25 +39,44 @@ install:
     - tar -xzf $(cat sourcemod-latest-linux)
     - COMPILE_SOURCEMOD_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod"
     - COMPILE_SCRIPTING_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod/scripting"
+    
     - wget https://raw.githubusercontent.com/asherkin/TF2Items/master/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
     - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/master/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
     - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/master/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
-    - AVERSIONING_COMMIT=$(git rev-list --count HEAD)
+    
+    - COMMIT_NUMBER=$(git rev-list --count HEAD)
+    - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
+    - VERSION="$TAG.$COMMIT_NUMBER"
 
 before_script:
     - python3 "$TRAVIS_BUILD_DIR/.buildtools/versioning/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
     - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
     - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
     - mkdir "$TRAVIS_BUILD_DIR/plugins"
-    - FILE=tf2_taunts_tf2idb-n$AVERSIONING_COMMIT-$CACHE_BUILDER.zip
+    - FILE=tf2_taunts_tf2idb-n$COMMIT_NUMBER-$CACHE_BUILDER.zip
     - if [ "$CACHE_BUILDER" = "tf2ii" ]; then EXTRA_ARGS='_USE_TF2II_INSTEAD_OF_TF2IDB='; else EXTRA_ARGS=''; fi
+    - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
 
 # And compile!
 script: 
     - $COMPILE_SCRIPTING_FOLDER/spcomp $COMPILE_SCRIPTING_FOLDER/tf2_taunts_tf2idb.sp -o$TRAVIS_BUILD_DIR/plugins/tf2_taunts_tf2idb.smx $EXTRA_ARGS
 
 before_deploy:
-    - zip -r $FILE ./translations/ ./plugins/ ./scripting/ ./gamedata/
+    - cd $TRAVIS_BUILD_DIR
+    - PACKAGE_DIRS[0]="./plugins/"
+    - PACKAGE_DIRS[1]="./scripting/" 
+    - PACKAGE_DIRS[1]="./translations/" 
+    - PACKAGE_DIRS[1]="./gamedata/" 
+    - zip -r $FILE ${PACKAGE_DIRS[*]}
+    
+    - PACKAGE_PATH="$TRAVIS_BUILD_DIR/.package_updater"
+    - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
+    
+    - rm -rf "$PACKAGE_PATH/"
+    - mkdir "$PACKAGE_PATH/"
+    - cp -r ${PACKAGE_DIRS[*]} "$PACKAGE_PATH/"
+    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_script_gen.py" --sm_path "$PACKAGE_PATH" --version "$VERSION" --notes "Version $VERSION is out!" "Go to $URL to see the changes" --output "$PACKAGE_PATH/updater.txt"
+    - chmod +x "$UPDATER_SCRIPTS_PATH/deploy.sh"
 
 deploy:
     provider: releases
@@ -56,6 +89,15 @@ deploy:
         condition: $SMVERSION = 1.8
         repo: fakuivan/TF2-Taunts-TF2IDB
         tags: true
+        
+    - provider: script
+      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL"'
+      skip_cleanup: true
+      on:
+          repo: fakuivan/TF2-Taunts-TF2IDB
+          branch: updater_test
+          condition: $SMVERSION = 1.8
+          tags: false
 
 # Notifications
 notifications:
