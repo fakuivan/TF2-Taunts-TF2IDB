@@ -11,6 +11,7 @@
 /scripting/include/tf2idb.inc
 /scripting/include/tf2items.inc
 /scripting/include/tf2itemsinfo.inc
+/scripting/include/updater.inc
 
 ## Ignore autoversioning includes
 autoversioning.inc

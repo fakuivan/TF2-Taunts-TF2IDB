@@ -6,6 +6,9 @@
  #include "tf2idb.inc"
 #endif
 #include "tf2items.inc"
+#undef REQUIRE_PLUGIN
+#include <updater>
+#define REQUIRE_PLUGIN
 
 #include <sourcemod>
 #include <tf2_stocks>
@@ -17,6 +20,7 @@
 #include "tf2_taunts_tf2idb/taunt_enforcer.inc"
 #include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
 #include "tf2_taunts_tf2idb/autoversioning.inc"
+#include "tf2_taunts_tf2idb/updater_helpers.inc"
 
 #if defined _autoversioning_included
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "_" ... _USING_ITEMS_HELPER
@@ -32,6 +36,8 @@ public Plugin myinfo =
 	version = PLUGIN_VERSION,
 	url = "https://forums.alliedmods.net/member.php?u=264797"
 };
+
+#define UPDATE_URL	UPDATER_HELPER_URL
 
 CTauntCacheSystem gh_cache;
 CTauntEnforcer gh_enforcer;
@@ -79,10 +85,23 @@ public void OnPluginStart()
 	LoadTranslations("common.phrases");
 	LoadTranslations("tf2.taunts.tf2idb");
 	
+	if (LibraryExists("updater"))
+	{
+		Updater_AddPlugin(UPDATE_URL);
+	}
+	
 	RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Lists the available taunts for a client on a specific class");
 	RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Lists the available taunts for a client on a specific class");
 	RegConsoleCmd("sm_taunts", Command_ForceToTaunt, "Shows the taunts menu");
 	RegConsoleCmd("sm_taunt", Command_ForceToTaunt, "Shows the taunts menu");
+}
+
+public void OnLibraryAdded(const char[] s_name)
+{
+	if (StrEqual(s_name, "updater"))
+	{
+		Updater_AddPlugin(UPDATE_URL);
+	}
 }
 
 public Action Command_ListTaunts(int i_client, int i_args)
