@@ -50,13 +50,14 @@ install:
     - VERSION="$TAG.$COMMIT_NUMBER-$CACHE_BUILDER"
 
 before_script:
+    - if [ "$TRAVIS_BRANCH" = "updater" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
     - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
     - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
     - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
     
-    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$TRAVIS_BRANCH/$PROJECT_SHORTNAME_COMPLETE/updater.txt"
+    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$UPDATER_BRANCH/$PROJECT_SHORTNAME_COMPLETE/updater.txt"
     
-    - python3.5 "$VERSION_SCRIPTS_PATH/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
+    - python3.5 "$VERSION_SCRIPTS_PATH/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TAG"
     - python3.5 "$UPDATER_SCRIPTS_PATH/updater_link_helper.py" --include_dir "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" --url "$UPDATER_URL"
     - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
     - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
@@ -98,12 +99,22 @@ deploy:
           tags: true
         
     - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$TRAVIS_BRANCH"'
+      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
       skip_cleanup: true
       on:
           repo: fakuivan/TF2-Taunts-TF2IDB
           branch: updater_test
           condition: $SMVERSION = 1.8
+          tags: false
+        
+    - provider: script
+      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
+      skip_cleanup: true
+      on:
+          repo: fakuivan/TF2-Taunts-TF2IDB
+          branch: updater
+          condition: $SMVERSION = 1.8
+          #one must only commit (rebase) this branch before making a tag to get coherent release versions
           tags: false
 
 # Notifications
