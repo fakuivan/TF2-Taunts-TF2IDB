@@ -42,6 +42,17 @@ public Plugin myinfo =
 CTauntCacheSystem gh_cache;
 CTauntEnforcer gh_enforcer;
 
+enum InitializationStatus {
+	InitializationStatus_Success = 0,
+	InitializationStatus_InvalidGamedataFile,
+	InitializationStatus_InvalidGamedataOutdated,
+#if defined _tf2idb_included //{
+	InitializationStatus_FromTF2IDB_Error,
+#endif //}
+}
+
+InitializationStatus gi_initialization = InitializationStatus_Success;
+
 enum TauntExecution {
 	TauntExecution_Success = 0,
 	TauntExecution_InvalidClient,
@@ -62,7 +73,11 @@ public void OnPluginStart()
 	gh_cache = CTauntCacheSystem.FromTF2IDB();
 	if (i_error != CTauntCacheSystem_FromTF2IDB_Error_None)
 	{
-		SetFailState("Failed to initialize taunt cache, error code %d", i_error);
+		gi_initialization = view_as<InitializationStatus>(i_error) + InitializationStatus_FromTF2IDB_Error;
+	}
+	if (gi_initialization >= InitializationStatus_FromTF2IDB_Error)
+	{
+		LogError("Failed to initialize taunt cache, error code %d", gi_initialization - InitializationStatus_FromTF2IDB_Error);
 	}
 #endif //}
 
@@ -72,28 +87,54 @@ public void OnPluginStart()
 		gh_cache = CTauntCacheSystem.FromTF2II();
 	}
 #endif //}
-	
 	Handle h_conf = LoadGameConfigFile("tf2.tauntem");
 	if (h_conf == INVALID_HANDLE)
 	{
-		SetFailState("Unable to load gamedata/tf2.tauntem.txt.");
+		gi_initialization = InitializationStatus_InvalidGamedataFile;
 	}
-	gh_enforcer = new CTauntEnforcer(h_conf);
+	else
+	{
+		if ((gh_enforcer = new CTauntEnforcer(h_conf)) == INVALID_HANDLE)
+		{
+			gi_initialization = InitializationStatus_InvalidGamedataOutdated;
+		}
+	}
 	
-	CreateConVar("sm_tf2_taunts_tf2idb_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	
-	LoadTranslations("common.phrases");
-	LoadTranslations("tf2.taunts.tf2idb");
+	if (gi_initialization == InitializationStatus_InvalidGamedataFile)
+	{
+		LogError("Unable to load gamedata/tf2.tauntem.txt.");
+	}
+	else if (gi_initialization == InitializationStatus_InvalidGamedataOutdated)
+	{
+		LogError("Unable to initialize CTauntEnforcer, gamedata files outdated.");
+	}
 	
 	if (LibraryExists("updater"))
 	{
+		if (gi_initialization != InitializationStatus_Success)
+		{
+			LogError("Halting user interface initialization. Plugin loaded, waiting for updates.");
+		}
 		Updater_AddPlugin(UPDATE_URL);
 	}
+	else if (gi_initialization != InitializationStatus_Success)
+	{
+		LogError("Halting user interface initialization. Plugin loaded but updater not found.");
+		LogError("Try using the latest version from here https://github.com/fakuivan/TF2-Taunts-TF2IDB .");
+	}
 	
-	RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
-	RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
-	RegConsoleCmd("sm_taunts", Command_ForceToTaunt, "Shows the taunts menu");
-	RegConsoleCmd("sm_taunt", Command_ForceToTaunt, "Shows the taunts menu");
+	CreateConVar("sm_tf2_taunts_tf2idb_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
+	
+	if (gi_initialization == InitializationStatus_Success)
+	{
+		LoadTranslations("common.phrases");
+		LoadTranslations("tf2.taunts.tf2idb");
+		
+		RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
+		RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
+		RegConsoleCmd("sm_taunts", Command_ForceToTaunt, "Shows the taunts menu");
+		RegConsoleCmd("sm_taunt", Command_ForceToTaunt, "Shows the taunts menu");
+	}
 }
 
 public void OnLibraryAdded(const char[] s_name)
