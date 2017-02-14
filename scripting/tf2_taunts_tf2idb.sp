@@ -90,8 +90,8 @@ public void OnPluginStart()
 		Updater_AddPlugin(UPDATE_URL);
 	}
 	
-	RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Lists the available taunts for a client on a specific class");
-	RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Lists the available taunts for a client on a specific class");
+	RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
+	RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
 	RegConsoleCmd("sm_taunts", Command_ForceToTaunt, "Shows the taunts menu");
 	RegConsoleCmd("sm_taunt", Command_ForceToTaunt, "Shows the taunts menu");
 }
