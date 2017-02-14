@@ -50,13 +50,19 @@ install:
     - VERSION="$TAG.$COMMIT_NUMBER"
 
 before_script:
-    - python3.5 "$TRAVIS_BUILD_DIR/.buildtools/versioning/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
+    - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
+    - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
+    - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
+    
+    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$TRAVIS_BRANCH/$PROJECT_SHORTNAME_COMPLETE/updater.txt"
+    
+    - python3.5 "$VERSION_SCRIPTS_PATH/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TRAVIS_TAG"
+    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_link_helper.py" --include_dir "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" --url "$UPDATER_URL"
     - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
     - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
     - mkdir "$TRAVIS_BUILD_DIR/plugins"
     - FILE=tf2_taunts_tf2idb-n$COMMIT_NUMBER-$CACHE_BUILDER.zip
     - if [ "$CACHE_BUILDER" = "tf2ii" ]; then EXTRA_ARGS='_USE_TF2II_INSTEAD_OF_TF2IDB='; else EXTRA_ARGS=''; fi
-    - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
 
 # And compile!
 script: 
@@ -71,7 +77,6 @@ before_deploy:
     - zip -r $FILE ${PACKAGE_DIRS[*]}
     
     - PACKAGE_PATH="$TRAVIS_BUILD_DIR/.package_updater"
-    - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
     
     - rm -rf "$PACKAGE_PATH/"
     - mkdir "$PACKAGE_PATH/"
@@ -93,7 +98,7 @@ deploy:
           tags: true
         
     - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL"'
+      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$TRAVIS_BRANCH"'
       skip_cleanup: true
       on:
           repo: fakuivan/TF2-Taunts-TF2IDB

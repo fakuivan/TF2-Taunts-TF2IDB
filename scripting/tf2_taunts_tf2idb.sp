@@ -20,6 +20,7 @@
 #include "tf2_taunts_tf2idb/taunt_enforcer.inc"
 #include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
 #include "tf2_taunts_tf2idb/autoversioning.inc"
+#include "tf2_taunts_tf2idb/updater_helpers.inc"
 
 #if defined _autoversioning_included
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "_" ... _USING_ITEMS_HELPER
@@ -36,7 +37,7 @@ public Plugin myinfo =
 	url = "https://forums.alliedmods.net/member.php?u=264797"
 };
 
-#define UPDATE_URL	"https://raw.githubusercontent.com/fakuivan/sm_updater_plugins/master/tf2_taunts_tf2idb-" ... _USING_ITEMS_HELPER ... "/updater.txt"
+#define UPDATE_URL	UPDATER_HELPER_URL
 
 CTauntCacheSystem gh_cache;
 CTauntEnforcer gh_enforcer;
