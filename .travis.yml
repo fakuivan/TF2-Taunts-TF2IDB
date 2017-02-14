@@ -47,7 +47,7 @@ install:
     
     - COMMIT_NUMBER=$(git rev-list --count HEAD)
     - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
-    - VERSION="$TAG.$COMMIT_NUMBER"
+    - VERSION="$TAG.$COMMIT_NUMBER-$CACHE_BUILDER"
 
 before_script:
     - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
