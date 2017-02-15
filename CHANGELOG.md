@@ -1,7 +1,7 @@
 * [1.4.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.4.5) "Disaster recovery"
     * Update description for ``sm_taunt_list``/``sm_taunts_list`` ([#3](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/3)).
     * Fix plugin not failing to initialize if gamedata is invalid ([#4](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/4)).
-    * Fix plugin unloading if initialization failed (and the updater not registring it), this means that if gamedata wasn't up-to-date or TF2IDB misbehaves when creating the cache, the plugin could still be registred by the updater. ([#5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/5))
+    * Fix plugin unloading if initialization failed (and the updater not registering it), this means that if gamedata wasn't up-to-date or TF2IDB misbehaves when creating the cache, the plugin could still be registered by the updater. ([#5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/5))
     * Changed class name "demo" by "demoman" ([#6](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/6))
 * [1.4](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.4) The updater!... update?
     * Add updater support (https://github.com/fakuivan/TF2-Taunts-TF2IDB/commit/781ac8e8b6f396cd7bddae86bc245041c5ebf905)
