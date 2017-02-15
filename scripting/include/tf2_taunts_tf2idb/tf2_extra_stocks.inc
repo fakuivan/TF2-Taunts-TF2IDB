@@ -15,7 +15,7 @@ stock int TF2_ClassEnumToString(TFClassType i_class, char s_class[TF_MAX_CLASS_N
 			case TFClass_Scout: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "scout");
 			case TFClass_Soldier: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "soldier");
 			case TFClass_Pyro: 		return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "pyro");
-			case TFClass_DemoMan: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "demo");
+			case TFClass_DemoMan: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "demoman");
 			case TFClass_Heavy: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "heavy");
 			case TFClass_Medic: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "medic");
 			case TFClass_Sniper: 	return Format(s_class, TF_MAX_CLASS_NAME_LENGTH, "sniper");
