@@ -79,6 +79,7 @@
 	{
 		"#format"	"{1:s},{2:s}" //target name, taunt name
 		"es"		"{1} se burla con \"{2}\"."
+	}
 	"tf2_taunts_tf2idb__taunt_force__LogAction"
 	{
 		"#format"	"{1:L},{2:L},{3:d}" //admin, target, taunt idx
