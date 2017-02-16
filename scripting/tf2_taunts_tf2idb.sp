@@ -233,26 +233,34 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 		char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
 		gh_cache.GetTauntName(i_taunt_index, s_taunt_name, gh_cache.m_iMaxNameLength);
 		
+		for (int i_iter = 0; i_iter < i_target_count; i_iter++)
+		{
+			if (b_target_hits[i_iter])
+			{
+				LogAction(i_client, i_target_list[i_iter], "%T", "tf2_taunts_tf2idb__taunt_force__LogAction", LANG_SERVER, i_client, i_target_list[i_iter], i_taunt_idx);
+			}
+		}
+		
 		if (b_tn_is_ml)
 		{
 			if (i_target_count > 1)
 			{
-				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultipleML", s_target_name, i_hits, i_target_count, s_taunt_name);
+				ShowActivity2(i_client, "[SM] ", "%t", "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML", s_target_name, i_hits, i_target_count, s_taunt_name);
 			}
 			else
 			{
-				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingularML", s_target_name, s_taunt_name);
+				ShowActivity2(i_client, "[SM] ", "%t", "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML", s_target_name, s_taunt_name);
 			}
 		}
 		else
 		{
 			if (i_target_count > 1)
 			{
-				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultiple", s_target_name, i_hits, i_target_count, s_taunt_name);
+				ShowActivity2(i_client, "[SM] ", "%t", "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple", s_target_name, i_hits, i_target_count, s_taunt_name);
 			}
 			else
 			{
-				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingular", s_target_name, s_taunt_name);
+				ShowActivity2(i_client, "[SM] ", "%t", "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular", s_target_name, s_taunt_name);
 			}
 		}
 	}

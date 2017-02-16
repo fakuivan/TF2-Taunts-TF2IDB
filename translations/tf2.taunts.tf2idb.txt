@@ -60,25 +60,30 @@
 		"en"		"Failed to execute taunt."
 	}
     
-	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultipleML"
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
 	{
 		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
 		"en"		"{2}/{3} of {1} is taunting \"{4}\"."
 	}
-	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingularML"
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML"
 	{
 		"#format"	"{1:t},{2:s}" //translated target name, taunt name
 		"en"		"{1} is taunting \"{2}\"."
 	}
-	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultiple"
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple"
 	{
 		"#format"	"{1:s},{2:d},{3:d},{4:s}" //target name, hits, target count, taunt name
 		"en"		"{2}/{3} of {1} is taunting \"{4}\"."
 	}
-	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingular"
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular"
 	{
 		"#format"	"{1:s},{2:s}" //target name, taunt name
 		"en"		"{1} is taunting \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__LogAction"
+	{
+		"#format"	"{1:L},{2:L},{3:d}" //admin, target, taunt idx
+		"en"		"\"{1}\" forced \"{2}\" to taunt (taunt_idx: {3})"
 	}
     
 	"tf2_taunts_tf2idb__commands__Usage"
