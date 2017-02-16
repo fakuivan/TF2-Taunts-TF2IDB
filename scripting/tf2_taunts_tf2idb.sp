@@ -112,8 +112,10 @@ public void OnPluginStart()
 		
 		RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
 		RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
-		RegConsoleCmd("sm_taunts", Command_ForceToTaunt, "Shows the taunts menu");
-		RegConsoleCmd("sm_taunt", Command_ForceToTaunt, "Shows the taunts menu");
+		RegConsoleCmd("sm_taunts", Command_ForceSelfToTaunt, "Shows the taunts menu");
+		RegConsoleCmd("sm_taunt", Command_ForceSelfToTaunt, "Shows the taunts menu");
+		RegAdminCmd("sm_taunts_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
+		RegAdminCmd("sm_taunt_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
 	}
 }
 
@@ -158,7 +160,7 @@ public Action Command_ListTaunts(int i_client, int i_args)
 	return Plugin_Handled;
 }
 
-public Action Command_ForceToTaunt(int i_client, int i_args)
+public Action Command_ForceSelfToTaunt(int i_client, int i_args)
 {
 #if defined _tf2itemsinfo_included //{
 	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
@@ -171,7 +173,7 @@ public Action Command_ForceToTaunt(int i_client, int i_args)
 			ReplyToTauntTarget(i_client, i_result);
 			return Plugin_Handled;
 		}
-		MenuMaker_TauntsMenu(i_client);
+		MenuMaker_TauntsMenu(i_client, MenuHandler_TauntsSelfMenu);
 	}
 	else if (i_args == 1)
 	{
@@ -190,41 +192,111 @@ public Action Command_ForceToTaunt(int i_client, int i_args)
 	return Plugin_Handled;
 }
 
+public Action Command_ForceOtherToTaunt(int i_client, int i_args)
+{
+#if defined _tf2itemsinfo_included //{
+	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
+#endif //}
+	if (i_args == 2)
+	{
+		int i_taunt_idx = GetCmdArgInt(2);
+		int i_taunt_index;
+		if (!gh_cache.IsValidTaunt(i_taunt_idx, TFClass_Unknown, i_taunt_index))
+		{
+			ReplyToTauntTarget(i_client, TauntExecution_IvalidIDX);
+			return Plugin_Handled;
+		}
+		
+		char s_target[MAX_NAME_LENGTH];
+		GetCmdArg(1, s_target, sizeof(s_target));
+		
+		char s_target_name[MAX_TARGET_LENGTH];
+		int i_target_list[MAXPLAYERS], i_target_count;
+		bool b_target_hits[MAXPLAYERS];
+		bool b_tn_is_ml;
+	 
+		if ((i_target_count = ProcessTargetString(
+				s_target,
+				i_client,
+				i_target_list,
+				MAXPLAYERS,
+				COMMAND_FILTER_ALIVE,
+				s_target_name,
+				sizeof(s_target_name),
+				b_tn_is_ml)) <= 0)
+		{
+			ReplyToTargetError(i_client, i_target_count);
+			return Plugin_Handled;
+		}
+		
+		int i_hits = gh_enforcer.ForceTauntMultiple(i_target_list, b_target_hits, i_target_count, i_taunt_idx);
+		char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
+		gh_cache.GetTauntName(i_taunt_index, s_taunt_name, gh_cache.m_iMaxNameLength);
+		
+		if (b_tn_is_ml)
+		{
+			if (i_target_count > 1)
+			{
+				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultipleML", s_target_name, i_hits, i_target_count, s_taunt_name);
+			}
+			else
+			{
+				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingularML", s_target_name, s_taunt_name);
+			}
+		}
+		else
+		{
+			if (i_target_count > 1)
+			{
+				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultiple", s_target_name, i_hits, i_target_count, s_taunt_name);
+			}
+			else
+			{
+				ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingular", s_target_name, s_taunt_name);
+			}
+		}
+	}
+	else
+	{
+		ReplyToCommand(i_client, "%t: sm_taunt_force <target> <taunt_idx>", "tf2_taunts_tf2idb__commands__Usage");
+	}
+	return Plugin_Handled;
+}
 
 //menu thingies
-bool MenuMaker_TauntsMenu(int i_client)
+bool MenuMaker_TauntsMenu(int i_client, MenuHandler f_handler, any a_data = 0)
 {
 	TFClassType i_class =  TF2_GetPlayerClass(i_client);
 	
-	Menu h_menu = CreateMenu(MenuHandler_TauntsMenu);
-	
-	ArrayList h_list_for_class = gh_cache.GetListForClass(i_class);
-	int i_name_maxlen = gh_cache.m_iMaxNameLength;
-	char[] s_name = new char[i_name_maxlen];
-	char s_hex_idx[10];
+	Menu h_menu = CreateMenu(f_handler);
 	
 	SetMenuTitle(h_menu, "%T", "tf2_taunts_tf2idb__menu__title", i_client);
 	
-	for (int i_iter = 0; i_iter < GetArraySize(h_list_for_class); i_iter++)
-	{
-		int i_index = GetArrayCell(h_list_for_class, i_iter);
-		gh_cache.GetTauntName(i_index, s_name, i_name_maxlen);
-		Format(s_hex_idx, sizeof(s_hex_idx), "%x", gh_cache.GetTauntItemID(i_index));
-		AddMenuItem(h_menu, s_hex_idx, s_name);
-	}
-	
-	for (int i_iter = 0; i_iter < GetArraySize(gh_cache.m_hAllClassTaunts); i_iter++)
-	{
-		int i_index = GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter);
-		gh_cache.GetTauntName(i_index, s_name, i_name_maxlen);
-		Format(s_hex_idx, sizeof(s_hex_idx), "%x", gh_cache.GetTauntItemID(i_index));
-		AddMenuItem(h_menu, s_hex_idx, s_name);
-	}
+	AddTauntsToMenu(h_menu, i_class, gh_cache);
+	AddDataToMenuAsInvisibleItem(h_menu, a_data);
 	
 	return DisplayMenu(h_menu, i_client, MENU_TIME_FOREVER);
 }
 
-public int MenuHandler_TauntsMenu(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
+public int MenuHandler_TauntsOtherMenu(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
+{
+	if(i_action == MenuAction_End)
+	{
+		CloseHandle(h_menu);
+	}
+	
+	if(i_action == MenuAction_Select)
+	{
+		char s_hex_idx[10];
+		
+		GetMenuItem(h_menu, i_param2, s_hex_idx, sizeof(s_hex_idx));
+		int i_taunt_idx = StringToInt(s_hex_idx, 16);
+		TauntExecution i_result = CheckAndTaunt(i_param1, i_taunt_idx, gh_enforcer, gh_cache);
+		ReplyToTauntTarget(i_param1, i_result);
+	}
+}
+
+public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
 {
 	if(i_action == MenuAction_End)
 	{

@@ -60,6 +60,26 @@
 		"es"		"No se pudo ejecutar la burla."
 	}
     
+	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultipleML"
+	{
+		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
+		"es"		"{2}/{3} de {1} se burla con \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingularML"
+	{
+		"#format"	"{1:t},{2:s}" //translated target name, taunt name
+		"es"		"{1} se burla con \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulMultiple"
+	{
+		"#format"	"{1:s},{2:d},{3:d},{4:s}" //target name, hits, target count, taunt name
+		"es"		"{2}/{3} de {1} se burla con \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__Reply_TauntSuccessfulSingular"
+	{
+		"#format"	"{1:s},{2:s}" //target name, taunt name
+		"es"		"{1} se burla con \"{2}\"."
+    
 	"tf2_taunts_tf2idb__commands__Usage"
 	{
 		"es"		"Uso"

@@ -8,7 +8,7 @@
 
 #include "tf2items.inc"
 
-typedef TauntMultipleFilter = function bool(int i_target)
+typedef TauntMultipleFilter = function bool(int i_target);
 
 methodmap CTauntEnforcer < Handle {
 	public CTauntEnforcer(Handle h_game_config, const char[] s_prop_name = "CTFPlayer::PlayTauntSceneFromItem")

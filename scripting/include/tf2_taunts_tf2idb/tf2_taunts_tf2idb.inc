@@ -6,6 +6,8 @@
 #endif
 #define _tf2_taunts_tf2idb_included
 
+#define INT_HEX_LENGTH	10
+
 enum TauntExecution {
 	TauntExecution_Success = 0,
 	TauntExecution_InvalidClient,
@@ -130,4 +132,46 @@ stock int GetCmdArgInt(int i_argnum, int i_length = 12, int i_base = 10)
 	char[] s_buffer = new char[i_length];
 	GetCmdArg(i_argnum, s_buffer, i_length);
 	return StringToInt(s_buffer, i_base);
+}
+
+stock bool AddDataToMenuAsInvisibleItem(Handle h_menu, any a_data)
+{
+	char s_data[INT_HEX_LENGTH];
+	Format(s_data, sizeof(s_data), "%x", a_data);
+	return AddMenuItem(h_menu, s_data, "", ITEMDRAW_IGNORE);
+}
+
+stock any GetDataFromInvisibleMenuItem(Handle h_menu, bool b_last_position = true, int i_position = -1, bool &b_success = false)
+{
+	char s_data[INT_HEX_LENGTH];
+	if (b_last_position)
+	{
+		i_position = GetMenuItemCount(h_menu) - 1;
+	}
+	b_success = GetMenuItem(h_menu, i_position, s_data, sizeof(s_data));
+	return view_as<any>(StringToInt(s_data, 16));
+}
+
+stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem h_taunts)
+{
+	ArrayList h_list_for_class = h_taunts.GetListForClass(i_class);
+	int i_name_maxlen = h_taunts.m_iMaxNameLength;
+	char[] s_name = new char[i_name_maxlen];
+	char s_hex_idx[10];
+	
+	for (int i_iter = 0; i_iter < GetArraySize(h_list_for_class); i_iter++)
+	{
+		int i_index = GetArrayCell(h_list_for_class, i_iter);
+		h_taunts.GetTauntName(i_index, s_name, i_name_maxlen);
+		Format(s_hex_idx, sizeof(s_hex_idx), "%x", h_taunts.GetTauntItemID(i_index));
+		AddMenuItem(h_menu, s_hex_idx, s_name);
+	}
+	
+	for (int i_iter = 0; i_iter < GetArraySize(h_taunts.m_hAllClassTaunts); i_iter++)
+	{
+		int i_index = GetArrayCell(h_taunts.m_hAllClassTaunts, i_iter);
+		h_taunts.GetTauntName(i_index, s_name, i_name_maxlen);
+		Format(s_hex_idx, sizeof(s_hex_idx), "%x", h_taunts.GetTauntItemID(i_index));
+		AddMenuItem(h_menu, s_hex_idx, s_name);
+	}
 }
