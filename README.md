@@ -1,6 +1,8 @@
 ﻿# TF2 Taunts TF2IDB [![Build Status](https://travis-ci.org/fakuivan/TF2-Taunts-TF2IDB.svg?branch=master)](https://travis-ci.org/fakuivan/TF2-Taunts-TF2IDB)
 An extensible and auto-updatable TF2 taunt menu/command plugin for sourcemod that is intended to replace plugins like [Taunt'em](https://forums.alliedmods.net/showthread.php?p=2157489) and [Random taunt menu plugins thrown around that thread](https://forums.alliedmods.net/showpost.php?p=2185997&postcount=84)
 
+![Menu](.docs/media/taunt_menu.png)
+
 ## Usage
 ### Demo video 
 [![Demo video](https://img.youtube.com/vi/IbQTIAP9hYs/0.jpg)](https://www.youtube.com/watch?v=IbQTIAP9hYs)
