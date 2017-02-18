@@ -69,6 +69,45 @@ stock void ReplyToTauntTarget(int i_target, TauntExecution i_result)
 	}
 }
 
+stock void ReplyToTauntTargetOther(int i_target, TauntExecution i_result)
+{
+	switch (i_result)
+	{
+		case TauntExecution_InvalidClient:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__InvalidClient");
+		}
+		case TauntExecution_ClientIsSpectator:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__ClientIsSpectator");
+		}
+		case TauntExecution_ClientIsUnassigned:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__ClientIsUnassigned");
+		}
+		case TauntExecution_InvalidClass:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__InvalidClass");
+		}
+		case TauntExecution_TargetIsDead:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__TargetIsDead");
+		}
+		case TauntExecution_WrongClass:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__WrongClass");
+		}
+		case TauntExecution_IvalidIDX:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__IvalidIDX");
+		}
+		case TauntExecution_TauntFailed:
+		{
+			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__TauntFailed");
+		}
+	}
+}
+
 stock TauntExecution CheckOnly(int i_target, TFClassType &i_class = TFClass_Unknown)
 {
 	if (!(i_target > 0 && i_target <= MaxClients))
@@ -98,15 +137,17 @@ stock TauntExecution CheckOnly(int i_target, TFClassType &i_class = TFClass_Unkn
 	return TauntExecution_Success;
 }
 
-stock TauntExecution CheckAndTaunt(int i_target, int i_idx, CTauntEnforcer h_enforcer, CTauntCacheSystem h_taunts)
+stock TauntExecution CheckClassToo(int i_target, int i_idx, CTauntCacheSystem h_taunts, TFClassType &i_class = TFClass_Unknown)
 {
 	TauntExecution i_check_only_result;
-	TFClassType i_class;
 	if ((i_check_only_result = CheckOnly(i_target, i_class)) != TauntExecution_Success) { return i_check_only_result; }
 	
-	i_class = TF2_GetPlayerClass(i_target);
 	int i_index;
-	if (!h_taunts.IsValidTaunt(i_idx, i_class, i_index))
+	if (h_taunts.IsValidTaunt(i_idx, i_class, i_index))
+	{
+		return TauntExecution_Success;
+	}
+	else
 	{
 		if (i_index != -1)	//if IsValidTaunt returns false but the index is not -1, the idx is valid, but the classes don't match
 		{
@@ -117,13 +158,20 @@ stock TauntExecution CheckAndTaunt(int i_target, int i_idx, CTauntEnforcer h_enf
 			return TauntExecution_IvalidIDX;
 		}
 	}
-	if (!h_enforcer.ForceTaunt(i_target, i_idx))
+}
+
+stock TauntExecution CheckAndTaunt(int i_target, int i_idx, CTauntEnforcer h_enforcer, CTauntCacheSystem h_taunts, TFClassType &i_class = TFClass_Unknown)
+{
+	TauntExecution i_check_only_result;
+	if ((i_check_only_result = CheckClassToo(i_target, i_idx, h_taunts, i_class)) != TauntExecution_Success) { return i_check_only_result; }
+	
+	if (h_enforcer.ForceTaunt(i_target, i_idx))
 	{
-		return TauntExecution_TauntFailed;
+		return TauntExecution_Success;
 	}
 	else
-	{	
-		return TauntExecution_Success;
+	{
+		return TauntExecution_TauntFailed;
 	}
 }
 

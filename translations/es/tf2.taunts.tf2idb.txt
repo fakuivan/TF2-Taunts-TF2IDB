@@ -60,6 +60,39 @@
 		"es"		"No se pudo ejecutar la burla."
 	}
     
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClient"
+	{
+		"es"		"No puedes forzar burlas para la consola del servidor."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned"
+	{
+		"es"		"El jugador debe unirse a un equipo para poder hacer burlas."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator"
+	{
+		"es"		"El jugador debe estar en otro equipo diferente a espectador."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClass"
+	{
+		"es"		"El jugador debe unirse a una clase para poder hacer burlas."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TargetIsDead"
+	{
+		"es"		"El jugador no puede hacer burlas estando muerto."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__WrongClass"
+	{
+		"es"		"Burla no disponible para la clase del jugador."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__IvalidIDX"
+	{
+		"es"		"\"Item Definition Index\" no válido o el ítem no es una burla."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TauntFailed"
+	{
+		"es"		"No se pudo ejecutar la burla en el jugador."
+	}
+    
 	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
 	{
 		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
