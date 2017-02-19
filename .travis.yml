@@ -52,6 +52,7 @@ install:
 before_script:
     #Tagged releases only count if this is the master branch, else only updater releases will be used
     - if [ "$TRAVIS_BRANCH" = "$TAG" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
+    - if [ "$TRAVIS_BRANCH" = "updater" ]; then UPDATER_BRANCH='master'; fi
     - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
     - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
     - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
