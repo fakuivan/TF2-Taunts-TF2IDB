@@ -1,3 +1,5 @@
+* [1.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5) Make others taunt! _if you are an admin_ :P
+    * Add the ``sm_taunt_force``/``sm_taunts_force`` command to allow admins to make other players taunt ([#8](https://github.com/fakuivan/TF2-Taunts-TF2IDB/pull/8)).
 * [1.4.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.4.5) "Disaster recovery"
     * Update description for ``sm_taunt_list``/``sm_taunts_list`` ([#3](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/3)).
     * Fix plugin not failing to initialize if gamedata is invalid ([#4](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/4)).
