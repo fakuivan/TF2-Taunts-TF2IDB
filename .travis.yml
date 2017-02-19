@@ -21,7 +21,7 @@ env:
         - UPDATER_USER_EMAIL="$UPDATER_USER@gmail.com"
         - URL="https://github.com/$UPDATER_USER/TF2-Taunts-TF2IDB"
         #UPDATER_REPO_OAUTH
-        - secure: "FMK6cgZ03UxVkQLMXdRQ/LqgCj0cqfTf5woPw8oewUYHNUKf/E+bzm40UJzg42POLUjcPj2S2JUMlChTyyAWGQ3vgOx75Z0zKGB22/r7IlOLMiX83v3Q+DP1Q+v+EVz+FUcDk9e8fo1KbHJUZVoeDeRNkLqdLFFZsUr9GoeBiufGSGBGi11Tg9C9+JoD7P/OfDtOcNcLVoUoo/ryQm34vD+Bg6ZENREeWaaexCOHIGuEns/gDSI6Jhk0tUNAIAzilDCZvd6fZX15EH6/HbS3Z9cs5lYqxOlqC/0LAGDgozIfXMONcygVwuxAclUUKQ2Z0+PWYYusxMjhXe8JJOz4mXX065HzyCIj62ZsWrNTQknaeRjPZgnPP+rJ+UGevv5l4Xghk2dWr+mrGS1mLx3htR/bTtd4oyomb4VAS/AxRM1A78pRbcyxM/1iuDVBVEkSR9KNmZ1aehtTnYncef+Q0YO7kRTKYcd752XAo/fv/4UGI83gW4tIu0CCmbmyWotbdPXxZVaIzgXFE5v4LrPCJ6lAQonWSL/dl7TTTp+tI5ow7KgoWM06xnuzn2xiNQR3rfKiA7GZK1Vy7sgOR9BfLJIV8s0lNGF4/xSIPYrJvKzayJsJxgCMdDj+O3nbBOzqjR1MbyiWxfAkrFLeHsSzolWPvl/ZXhLiptYnTT7MkI0="
+        - secure: "WtXF+/fPglmoDnI1l0fGnUmC8zrYxaaHdpG3IwKD95o/hUnSk4L0kfFvxhqDIqmhZOAFpdERnmpo1IrdR/LoTO5htO+5qZ+fmaDh5He7EbaNAaafOVaDKJ4GTj+HPYah8gVodvkzKOOqi5fnGekaKa9Fv8G0WEDcikIJ59HQ6yaGx6Jh/ct7G7OfY1nGhvj5frSBGK4PiPvtuC8w1GOvzamRGAebQ7BZzHcr50TvA8WzsSb/wcPdhRKbb0Q85E0L6ndXVt7pTYtzhFq84LIQTCjYWV3126+fjehoCK8V4isFqwYcrISft6UTpEGJ7U2J4V7h7lvxuqOZG6+m+sKPm8QIsopeiHPLOin7X+ye50k/Hhdkw2YS+x4hQBYntW6loop0gfNxb7OCy+P3dZxmExlc2yH/lLX0rcPStdP7f0hcj4RT3yH4e467ZvW2UI0V0YlQvMUpQeOPEGLfTBw4zd2hdwY7WSjf8y0DN7ThZ2Rf62pIMTW3fBzp6NmVXaik7vd/ryvx0kmjih8HNxuO46SUfcMfpNyHwL2QRUbp1mPiVk2pJzaehhYGLRxI2z6XJ+3/+S/UzGWz/d+D8pvbWqKcNLLyh8B1el/nQ40OQQoQipWjudHRBryy4JcNDbDPKAqC7cW10AENTl1P8TOQAQsURyiHaISrhvRK53TX7PQ="
     matrix:
         - SMVERSION=1.8 CACHE_BUILDER=tf2idb
         - SMVERSION=1.8 CACHE_BUILDER=tf2ii
@@ -50,7 +50,8 @@ install:
     - VERSION="$TAG.$COMMIT_NUMBER-$CACHE_BUILDER"
 
 before_script:
-    - if [ "$TRAVIS_BRANCH" = "updater" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
+    #Tagged releases only count if this is the master branch, else only updater releases will be used
+    - if [ "$TRAVIS_BRANCH" = "$TAG" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
     - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
     - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
     - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
