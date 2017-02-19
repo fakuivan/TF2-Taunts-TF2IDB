@@ -60,6 +60,65 @@
 		"en"		"Failed to execute taunt."
 	}
     
+	"tf2_taunts_tf2idb__failed_to_target_other__InvalidClient"
+	{
+		"en"		"You can't target the server console."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__ClientIsUnassigned"
+	{
+		"en"		"Target must join a team to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__ClientIsSpectator"
+	{
+		"en"		"Target can't taunt from team Spectator."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__InvalidClass"
+	{
+		"en"		"Target must join a class to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__TargetIsDead"
+	{
+		"en"		"Target must be alive to taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__WrongClass"
+	{
+		"en"		"Taunt not avaliable for target's class."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__IvalidIDX"
+	{
+		"en"		"Not a valid Item Definition Index or item is not a taunt."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__TauntFailed"
+	{
+		"en"		"Failed to execute taunt on target."
+	}
+    
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
+	{
+		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
+		"en"		"{2}/{3} of {1} is taunting \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML"
+	{
+		"#format"	"{1:t},{2:s}" //translated target name, taunt name
+		"en"		"{1} is taunting \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple"
+	{
+		"#format"	"{1:s},{2:d},{3:d},{4:s}" //target name, hits, target count, taunt name
+		"en"		"{2}/{3} of {1} is taunting \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular"
+	{
+		"#format"	"{1:s},{2:s}" //target name, taunt name
+		"en"		"{1} is taunting \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__LogAction"
+	{
+		"#format"	"{1:L},{2:L},{3:d}" //admin, target, taunt idx
+		"en"		"\"{1}\" forced \"{2}\" to taunt (taunt_idx: {3})"
+	}
+    
 	"tf2_taunts_tf2idb__commands__Usage"
 	{
 		"en"		"Usage"
