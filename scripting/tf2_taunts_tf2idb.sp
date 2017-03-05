@@ -25,9 +25,9 @@
 #include "tf2_taunts_tf2idb/tf2_taunts_tf2idb.inc"
 
 #if defined _autoversioning_included
- #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "_" ... _USING_ITEMS_HELPER
+ #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "-" ... _USING_ITEMS_HELPER
 #else
- #define PLUGIN_VERSION "1.5" ... "." ... "*" ... "_" ... _USING_ITEMS_HELPER
+ #define PLUGIN_VERSION "1.5" ... "." ... "*" ... "-" ... _USING_ITEMS_HELPER
 #endif
 
 public Plugin myinfo = 
