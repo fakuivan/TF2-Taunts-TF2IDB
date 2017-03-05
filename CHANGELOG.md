@@ -1,3 +1,5 @@
+* [1.5.1](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.1) Minor updater fix
+    * Fix version strings mismatch between the updater manifest file and the version reported by the plugin, making the updater update the already up-to-date plugin ([#11](https://github.com/fakuivan/TF2-Taunts-TF2IDB/pull/11)).
 * [1.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5) Make others taunt! _if you are an admin_ :P
     * Add the ``sm_taunt_force``/``sm_taunts_force`` command to allow admins to make other players taunt ([#8](https://github.com/fakuivan/TF2-Taunts-TF2IDB/pull/8)).
 * [1.4.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.4.5) "Disaster recovery"
