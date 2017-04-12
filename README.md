@@ -91,11 +91,12 @@ Now each time you press ``KEY`` you'll taunt to the rhythm of ``id`` 💃
 ## Installing
 
 1. Make sure you have [TF2ItemsInfo](https://github.com/chauffer/tf2itemsinfo) or [TF2ItemsDB](https://forums.alliedmods.net/showthread.php?t=255885) (preferred) installed on your server.
-2. __Recommended__: Install the [Updater](https://forums.alliedmods.net/showthread.php?p=1570806) plugin or check if you have it installed (`sm plugins info updater`), all releases/updates to this repo will be immediately available to the updater, including updates to gamedata files.
-3. Go to the [releases](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases) section.
-4. Look for the latest post and download the attached zip file that matches your installed schema API (eg. ``tf2_taunts_tf2idb-nX-tf2ii.zip`` for TF2II).
-5. Drag and drop the contents of the file to your ``sourcemod`` folder.
-6. Load the plugin (``sm plugins load tf2_taunts_tf2idb``) and test it using the ``sm_taunt_list`` command.
+2. You'll need the [TF2Items](https://forums.alliedmods.net/showthread.php?t=115100) extension too. You can download the latest snapshot from [here](https://builds.limetech.io/?p=tf2items).
+3. __Recommended__: Install the [Updater](https://forums.alliedmods.net/showthread.php?p=1570806) plugin or check if you have it installed (`sm plugins info updater`), all releases/updates to this repo will be immediately available to the updater, including updates to gamedata files.
+4. Go to the [releases](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases) section.
+5. Look for the latest post and download the attached zip file that matches your installed schema API (eg. ``tf2_taunts_tf2idb-nX-tf2ii.zip`` for TF2II).
+6. Drag and drop the contents of the file to your ``sourcemod`` folder.
+7. Load the plugin (``sm plugins load tf2_taunts_tf2idb``) and test it using the ``sm_taunt_list`` command.
 
 ## Contributing
 
