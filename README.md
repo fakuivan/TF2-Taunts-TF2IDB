@@ -21,8 +21,8 @@ General usage:
 ### Example usage
 
 <details> 
-  <summary>Output from ``sm_taunt_list``: </summary>
-```
+  <summary>Output from <code>sm_taunt_list</code>: </summary>
+<pre>
 sm_taunt_list
 [SM] Taunts:
 - Taunts for class engineer:
@@ -78,7 +78,7 @@ sm_taunt_list
 -  30621: Taunt: Burstchester (All Class)
 -  30672: Taunt: Zoomin' Broom (All Class)
 -  30816: Taunt: Second Rate Sorcery (All Class)
-```
+</pre>
 </details>
 
 ### Tips
