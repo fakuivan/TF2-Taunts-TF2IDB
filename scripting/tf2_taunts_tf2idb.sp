@@ -46,7 +46,7 @@ CTauntEnforcer gh_enforcer;
 
 InitializationStatus gi_initialization = InitializationStatus_Success;
 
-public void OnPluginStart()
+public void OnAllPluginsLoaded()
 {
 #if defined _tf2idb_included //{
 	CTauntCacheSystem_FromTF2IDB_Error i_error;
