@@ -1,3 +1,5 @@
+* [1.5.2](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.2) 2Fast4UM8, sadly
+    * Make this plugin call the item schema API once all pluigins are loaded fixing [#14](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/14)
 * [1.5.1](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.1) Minor updater fix
     * Fix version strings mismatch between the updater manifest file and the version reported by the plugin, making the updater update the already up-to-date plugin ([#11](https://github.com/fakuivan/TF2-Taunts-TF2IDB/pull/11)).
 * [1.5](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5) Make others taunt! _if you are an admin_ :P
