@@ -284,24 +284,6 @@ bool MenuMaker_TauntsMenu(int i_client, MenuHandler f_handler, any a_data = 0)
 	return DisplayMenu(h_menu, i_client, MENU_TIME_FOREVER);
 }
 
-public int MenuHandler_TauntsOtherMenu(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
-{
-	if(i_action == MenuAction_End)
-	{
-		CloseHandle(h_menu);
-	}
-	
-	if(i_action == MenuAction_Select)
-	{
-		char s_hex_idx[10];
-		
-		GetMenuItem(h_menu, i_param2, s_hex_idx, sizeof(s_hex_idx));
-		int i_taunt_idx = StringToInt(s_hex_idx, 16);
-		TauntExecution i_result = CheckAndTaunt(i_param1, i_taunt_idx, gh_enforcer, gh_cache);
-		ReplyToTauntTarget(i_param1, i_result);
-	}
-}
-
 public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
 {
 	if(i_action == MenuAction_End)
