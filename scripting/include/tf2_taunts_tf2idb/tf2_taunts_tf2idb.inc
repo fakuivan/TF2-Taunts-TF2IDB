@@ -182,6 +182,53 @@ stock int GetCmdArgInt(int i_argnum, int i_length = 12, int i_base = 10)
 	return StringToInt(s_buffer, i_base);
 }
 
+stock void Notify_ForceTaunt(	int i_client, 
+								int i_idx, 
+								bool b_tn_is_ml, 
+								const char[] s_target_name,
+								const int[] i_target_list, 
+								const bool[] b_success, 
+								int i_nof_targets, 
+								CTauntCacheSystem h_cache)
+{
+	int i_taunt_index = h_cache.FindTauntByDefIndex(i_idx);
+	int i_hits;
+	char[] s_taunt_name = new char[h_cache.m_iMaxNameLength];
+	h_cache.GetTauntName(i_taunt_index, s_taunt_name, h_cache.m_iMaxNameLength);
+	for (int i_iter = 0; i_iter < i_nof_targets; i_iter++)
+	{
+		if (b_success[i_iter])
+		{
+			LogAction(	i_client, i_target_list[i_iter], 
+						"%T", "tf2_taunts_tf2idb__taunt_force__LogAction", 	LANG_SERVER, i_client, 
+																			i_target_list[i_iter], 
+																			i_idx);
+			i_hits++;
+		}
+	}
+	
+	if (i_nof_targets > 1)
+	{
+		ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
+															: "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple", 
+															s_target_name, i_hits, i_nof_targets, s_taunt_name);
+	}
+	else
+	{
+		if (b_success[0])
+		{
+			ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML"
+																: "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular",
+																s_target_name, s_taunt_name);
+		}
+		else
+		{
+			TauntExecution i_result = CheckClassToo(i_target_list[0], i_idx, h_cache);
+			ReplyToTauntTargetOther(i_client, (i_result == TauntExecution_Success) ? TauntExecution_TauntFailed : i_result);
+		}
+	}
+}
+
 stock bool AddDataToMenuAsInvisibleItem(Handle h_menu, any a_data)
 {
 	char s_data[INT_HEX_LENGTH];
