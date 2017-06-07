@@ -229,6 +229,13 @@ stock void Notify_ForceTaunt(	int i_client,
 	}
 }
 
+stock int GetSelectedTauntIDXFromMenu(Handle h_menu, int i_position)
+{
+	char s_hex_idx[INT_HEX_LENGTH];
+	GetMenuItem(h_menu, i_position, s_hex_idx, sizeof(s_hex_idx));
+	return StringToInt(s_hex_idx, 16);
+}
+
 stock bool AddDataToMenuAsInvisibleItem(Handle h_menu, any a_data)
 {
 	char s_data[INT_HEX_LENGTH];
@@ -252,7 +259,7 @@ stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem 
 	ArrayList h_list_for_class = h_taunts.GetListForClass(i_class);
 	int i_name_maxlen = h_taunts.m_iMaxNameLength;
 	char[] s_name = new char[i_name_maxlen];
-	char s_hex_idx[10];
+	char s_hex_idx[INT_HEX_LENGTH];
 	
 	for (int i_iter = 0; i_iter < GetArraySize(h_list_for_class); i_iter++)
 	{

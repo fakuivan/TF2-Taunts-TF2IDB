@@ -263,10 +263,7 @@ public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_pa
 	
 	if(i_action == MenuAction_Select)
 	{
-		char s_hex_idx[10];
-		
-		GetMenuItem(h_menu, i_param2, s_hex_idx, sizeof(s_hex_idx));
-		int i_taunt_idx = StringToInt(s_hex_idx, 16);
+		int i_taunt_idx = GetSelectedTauntIDXFromMenu(h_menu, i_param2);
 		TauntExecution i_result = CheckAndTaunt(i_param1, i_taunt_idx, gh_enforcer, gh_cache);
 		ReplyToTauntTarget(i_param1, i_result);
 	}
