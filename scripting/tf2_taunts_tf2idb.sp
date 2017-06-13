@@ -16,11 +16,14 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+#define PLUGIN_SHORT_NAME "tf2_taunts_tf2idb"
+
 #include "tf2_taunts_tf2idb/taunt_cache_system.inc"
 #include "tf2_taunts_tf2idb/taunt_enforcer.inc"
 #include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
 #include "tf2_taunts_tf2idb/autoversioning.inc"
 #include "tf2_taunts_tf2idb/updater_helpers.inc"
+#include "tf2_taunts_tf2idb/target_symbols.inc"
 
 #include "tf2_taunts_tf2idb/tf2_taunts_tf2idb.inc"
 
@@ -103,7 +106,7 @@ public void OnAllPluginsLoaded()
 		LogError("Try using the latest version from here https://github.com/fakuivan/TF2-Taunts-TF2IDB .");
 	}
 	
-	CreateConVar("sm_tf2_taunts_tf2idb_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
+	CreateConVar("sm_" ... PLUGIN_SHORT_NAME ... "_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 	
 	if (gi_initialization == InitializationStatus_Success)
 	{
@@ -133,7 +136,7 @@ public Action Command_ListTaunts(int i_client, int i_args)
 	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
 #endif //}
 	
-	ReplyToCommand(i_client, "[SM] %t:", "tf2_taunts_tf2idb__taunts_list__ListOfTaunts");
+	ReplyToCommand(i_client, "[SM] %t:", PLUGIN_SHORT_NAME ... "__taunts_list__ListOfTaunts");
 	char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
 	char s_class[TF_MAX_CLASS_NAME_LENGTH];
 	
@@ -141,7 +144,7 @@ public Action Command_ListTaunts(int i_client, int i_args)
 	{
 		ArrayList h_taunts_for_class = gh_cache.GetListForClass(i_class);
 		TF2_ClassEnumToString(i_class, s_class);
-		ReplyToCommand(i_client, "- %t: ", "tf2_taunts_tf2idb__taunts_list__TauntsForClassX", s_class);
+		ReplyToCommand(i_client, "- %t: ", PLUGIN_SHORT_NAME ... "__taunts_list__TauntsForClassX", s_class);
 		for (int i_iter = 0; i_iter < GetArraySize(h_taunts_for_class); i_iter++)
 		{
 			int i_idx = gh_cache.GetTauntItemID(GetArrayCell(h_taunts_for_class, i_iter));
@@ -150,12 +153,12 @@ public Action Command_ListTaunts(int i_client, int i_args)
 		}
 	}
 	
-	ReplyToCommand(i_client, "- %t:", "tf2_taunts_tf2idb__taunts_list__TauntsForAllClasses");
+	ReplyToCommand(i_client, "- %t:", PLUGIN_SHORT_NAME ... "__taunts_list__TauntsForAllClasses");
 	for (int i_iter = 0; i_iter < GetArraySize(gh_cache.m_hAllClassTaunts); i_iter++)
 	{
 		int i_idx = gh_cache.GetTauntItemID(GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter));
 		gh_cache.GetTauntName(GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter), s_taunt_name, gh_cache.m_iMaxNameLength);
-		ReplyToCommand(i_client, "-  %d: %s (%t)", i_idx, s_taunt_name, "tf2_taunts_tf2idb__taunts_list__AllClass");
+		ReplyToCommand(i_client, "-  %d: %s (%t)", i_idx, s_taunt_name, PLUGIN_SHORT_NAME ... "__taunts_list__AllClass");
 	}
 	return Plugin_Handled;
 }
@@ -187,7 +190,7 @@ public Action Command_ForceSelfToTaunt(int i_client, int i_args)
 	}
 	else
 	{
-		ReplyToCommand(i_client, "%t: sm_taunt [taunt_idx]", "tf2_taunts_tf2idb__commands__Usage");
+		ReplyToCommand(i_client, "%t: sm_taunt [taunt_idx]", PLUGIN_SHORT_NAME ... "__commands__Usage");
 	}
 	return Plugin_Handled;
 }
@@ -240,7 +243,7 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 	{
 		ReplyToCommand(i_client, i_client == 0 	? "%t: sm_taunt_force <target> <taunt_idx>"
 												: "%t: sm_taunt_force [<target> <taunt_idx>]", 
-		"tf2_taunts_tf2idb__commands__Usage");
+		PLUGIN_SHORT_NAME ... "__commands__Usage");
 	}
 	return Plugin_Handled;
 }
@@ -252,7 +255,7 @@ bool MenuMaker_TauntsMenu(int i_client, MenuHandler f_handler, any a_data = 0)
 	
 	Menu h_menu = CreateMenu(f_handler);
 	
-	SetMenuTitle(h_menu, "%T", "tf2_taunts_tf2idb__menu__title", i_client);
+	SetMenuTitle(h_menu, "%T", PLUGIN_SHORT_NAME ... "__menu__title", i_client);
 	
 	AddTauntsToMenu(h_menu, i_class, gh_cache);
 	AddDataToMenuAsInvisibleItem(h_menu, a_data);
@@ -278,7 +281,7 @@ public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_pa
 bool MenuMaker_TauntOther_SelectTaunt(int i_client)
 {
 	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTaunt);
-	SetMenuTitle(h_menu, "%T:", "tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle", i_client);
+	SetMenuTitle(h_menu, "%T:", PLUGIN_SHORT_NAME ... "__taunt_force_menu__TauntsTitle", i_client);
 	SetMenuExitBackButton(h_menu, false);
 	
 	AddTauntsToMenu(h_menu, TFClass_Unknown, gh_cache);
@@ -308,9 +311,13 @@ bool MenuMaker_TauntOther_SelectTarget(int i_client, int i_idx)
 	h_data.Push(i_idx);
 	
 	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTarget);
-	SetMenuTitle(h_menu, "%T:", "tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle", i_client);
+	SetMenuTitle(h_menu, "%T:", PLUGIN_SHORT_NAME ... "__taunt_force_menu__TargetsTitle", i_client);
 	SetMenuExitBackButton(h_menu, true);
 	
+	AddFormattedMenuItem(	h_menu,
+							gs_target_symbols[TargetSymbol_All], 
+							ITEMDRAW_DEFAULT, 
+							"%T", gs_target_symbols_ml[TargetSymbol_All], i_client);
 	AddForcedTauntTargetsToMenu(h_menu, i_client, i_idx, gh_cache);
 	
 	AddDataToMenuAsInvisibleItem(h_menu, h_data);
@@ -331,18 +338,30 @@ public int MenuHandler_TauntOther_SelectTarget(Menu h_menu, MenuAction i_action,
 			
 			int i_target_count = 0;
 			bool b_tn_is_ml;
-			int[] i_targets = new int[1]; 
-			bool[] b_hits = new bool[1];
+			int[] i_targets = new int[MaxClients]; 
+			bool[] b_hits = new bool[MaxClients];
 			
-			char s_info[INT_DEC_LENGTH];
+			char s_info[MAX_TARGET_SYMBOL_LENGTH + INT_DEC_LENGTH];
 			
 			GetMenuItem(h_menu, i_param2, s_info, sizeof(s_info));
 			
-			b_tn_is_ml = false;
-			i_target_count = 1;
-			i_targets[0] = GetClientOfUserId(StringToInt(s_info));
-			GetClientName(i_targets[0], s_target_name, sizeof(s_target_name));
-			b_hits[0] = gh_enforcer.ForceTaunt(i_targets[0], i_idx);
+			TargetSymbol i_target_symbol = ParseTargetSymbol(s_info);
+			if (i_target_symbol == TargetSymbol_All)
+			{
+				b_tn_is_ml = true;
+				strcopy(s_target_name, sizeof(s_target_name), gs_target_symbols_ml[i_target_symbol]);
+				
+				i_target_count = FindValidTauntTargets(i_param1, i_targets, MaxClients, i_idx, gh_cache);
+				gh_enforcer.ForceTauntMultiple(i_targets, b_hits, i_target_count, i_idx);
+			}
+			else if (i_target_symbol == INVALID_TARGET_SYMBOL)
+			{
+				b_tn_is_ml = false;
+				i_target_count = 1;
+				i_targets[0] = GetClientOfUserId(StringToInt(s_info));
+				GetClientName(i_targets[0], s_target_name, sizeof(s_target_name));
+				b_hits[0] = gh_enforcer.ForceTaunt(i_targets[0], i_idx);
+			} else { return 0; } //unsupported target symbol
 			
 			Notify_ForceTaunt(i_param1, i_idx, b_tn_is_ml, s_target_name, i_targets, b_hits, i_target_count, gh_cache);
 			MenuMaker_TauntOther_SelectTarget(i_param1, i_idx);
@@ -368,7 +387,7 @@ bool CheckAndReplyCacheNotLoaded(int i_client)
 {
 	if (gh_cache == INVALID_HANDLE)
 	{
-		ReplyToCommand(i_client, "[SM] %t", "tf2_taunts_tf2idb__schema__Reply_NotCached");
+		ReplyToCommand(i_client, "[SM] %t", PLUGIN_SHORT_NAME ... "__schema__Reply_NotCached");
 		return true;
 	}
 	return false;

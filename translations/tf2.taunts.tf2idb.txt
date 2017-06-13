@@ -132,4 +132,9 @@
 	{
 		"en"		"Select a target"
 	}
+    
+	"tf2_taunts_tf2idb__TargetSymbols__@all"
+	{
+		"en"		"all players"
+	}
 }

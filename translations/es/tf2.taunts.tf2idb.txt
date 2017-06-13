@@ -132,4 +132,9 @@
 	{
 		"es"		"Seleccione un jugador"
 	}
+    
+	"tf2_taunts_tf2idb__TargetSymbols__@all"
+	{
+		"es"		"todos los jugadores"
+	}
 }

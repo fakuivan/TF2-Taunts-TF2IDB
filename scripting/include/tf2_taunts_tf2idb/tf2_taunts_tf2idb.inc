@@ -39,35 +39,35 @@ stock void ReplyToTauntTarget(int i_target, TauntExecution i_result)
 	{
 		case TauntExecution_InvalidClient:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__InvalidClient");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__InvalidClient");
 		}
 		case TauntExecution_ClientIsSpectator:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__ClientIsSpectator");
 		}
 		case TauntExecution_ClientIsUnassigned:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__ClientIsUnassigned");
 		}
 		case TauntExecution_InvalidClass:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__InvalidClass");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__InvalidClass");
 		}
 		case TauntExecution_TargetIsDead:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__TargetIsDead");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__TargetIsDead");
 		}
 		case TauntExecution_WrongClass:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__WrongClass");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__WrongClass");
 		}
 		case TauntExecution_IvalidIDX:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__IvalidIDX");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__IvalidIDX");
 		}
 		case TauntExecution_TauntFailed:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target__TauntFailed");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target__TauntFailed");
 		}
 	}
 }
@@ -78,35 +78,35 @@ stock void ReplyToTauntTargetOther(int i_target, TauntExecution i_result)
 	{
 		case TauntExecution_InvalidClient:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__InvalidClient");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__InvalidClient");
 		}
 		case TauntExecution_ClientIsSpectator:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__ClientIsSpectator");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__ClientIsSpectator");
 		}
 		case TauntExecution_ClientIsUnassigned:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__ClientIsUnassigned");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__ClientIsUnassigned");
 		}
 		case TauntExecution_InvalidClass:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__InvalidClass");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__InvalidClass");
 		}
 		case TauntExecution_TargetIsDead:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__TargetIsDead");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__TargetIsDead");
 		}
 		case TauntExecution_WrongClass:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__WrongClass");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__WrongClass");
 		}
 		case TauntExecution_IvalidIDX:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__IvalidIDX");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__IvalidIDX");
 		}
 		case TauntExecution_TauntFailed:
 		{
-			ReplyToCommand(i_target, "[SM] %t", "tf2_taunts_tf2idb__failed_to_target_other__TauntFailed");
+			ReplyToCommand(i_target, "[SM] %t", PLUGIN_SHORT_NAME ... "__failed_to_target_other__TauntFailed");
 		}
 	}
 }
@@ -129,25 +129,25 @@ stock void Notify_ForceTaunt(	int i_client,
 		if (b_success[i_iter])
 		{
 			LogAction(	i_client, i_target_list[i_iter], 
-						"%T", "tf2_taunts_tf2idb__taunt_force__LogAction", 	LANG_SERVER, i_client, 
-																			i_target_list[i_iter], 
-																			i_idx);
+						"%T", PLUGIN_SHORT_NAME ... "__taunt_force__LogAction", LANG_SERVER, i_client, 
+																				i_target_list[i_iter], 
+																				i_idx);
 			i_hits++;
 		}
 	}
 	
 	if (i_nof_targets > 1)
 	{
-		ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
-															: "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple", 
+		ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
+															: PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulMultiple", 
 															s_target_name, i_hits, i_nof_targets, s_taunt_name);
 	}
 	else
 	{
 		if (b_success[0])
 		{
-			ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML"
-																: "tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular",
+			ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulSingularML"
+																: PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulSingular",
 																s_target_name, s_taunt_name);
 		}
 		else
