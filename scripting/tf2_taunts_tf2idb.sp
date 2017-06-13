@@ -232,9 +232,15 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 		gh_enforcer.ForceTauntMultiple(i_target_list, b_target_hits, i_target_count, i_taunt_idx);
 		Notify_ForceTaunt(i_client, i_taunt_idx, b_tn_is_ml, s_target_name, i_target_list, b_target_hits, i_target_count, gh_cache);
 	}
+	else if (i_args == 0 && i_client != 0)
+	{
+		MenuMaker_TauntOther_SelectTaunt(i_client);
+	}
 	else
 	{
-		ReplyToCommand(i_client, "%t: sm_taunt_force <target> <taunt_idx>", "tf2_taunts_tf2idb__commands__Usage");
+		ReplyToCommand(i_client, i_client == 0 	? "%t: sm_taunt_force <target> <taunt_idx>"
+												: "%t: sm_taunt_force [<target> <taunt_idx>]", 
+		"tf2_taunts_tf2idb__commands__Usage");
 	}
 	return Plugin_Handled;
 }
@@ -267,6 +273,94 @@ public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_pa
 		TauntExecution i_result = CheckAndTaunt(i_param1, i_taunt_idx, gh_enforcer, gh_cache);
 		ReplyToTauntTarget(i_param1, i_result);
 	}
+}
+
+bool MenuMaker_TauntOther_SelectTaunt(int i_client)
+{
+	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTaunt);
+	SetMenuTitle(h_menu, "%T:", "tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle", i_client);
+	SetMenuExitBackButton(h_menu, false);
+	
+	AddTauntsToMenu(h_menu, TFClass_Unknown, gh_cache);
+	
+	return h_menu.Display(i_client, MENU_TIME_FOREVER);
+}
+
+public int MenuHandler_TauntOther_SelectTaunt(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
+{
+	switch(i_action)
+	{
+		case MenuAction_Select:
+		{
+			MenuMaker_TauntOther_SelectTarget(	i_param1,  
+												GetSelectedTauntIDXFromMenu(h_menu, i_param2));
+		}
+		case MenuAction_End:
+		{
+			CloseHandle(h_menu);
+		}
+	}
+}
+
+bool MenuMaker_TauntOther_SelectTarget(int i_client, int i_idx)
+{
+	ArrayList h_data = CreateArray();
+	h_data.Push(i_idx);
+	
+	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTarget);
+	SetMenuTitle(h_menu, "%T:", "tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle", i_client);
+	SetMenuExitBackButton(h_menu, true);
+	
+	AddForcedTauntTargetsToMenu(h_menu, i_client, i_idx, gh_cache);
+	
+	AddDataToMenuAsInvisibleItem(h_menu, h_data);
+	
+	return h_menu.Display(i_client, MENU_TIME_FOREVER);
+}
+
+public int MenuHandler_TauntOther_SelectTarget(Menu h_menu, MenuAction i_action, int i_param1, int i_param2)
+{
+	switch(i_action)
+	{
+		case MenuAction_Select:
+		{
+			ArrayList h_data = GetDataFromInvisibleMenuItem(h_menu);
+			int i_idx = h_data.Get(0);
+			
+			char s_target_name[MAX_TARGET_LENGTH];
+			
+			int i_target_count = 0;
+			bool b_tn_is_ml;
+			int[] i_targets = new int[1]; 
+			bool[] b_hits = new bool[1];
+			
+			char s_info[INT_DEC_LENGTH];
+			
+			GetMenuItem(h_menu, i_param2, s_info, sizeof(s_info));
+			
+			b_tn_is_ml = false;
+			i_target_count = 1;
+			i_targets[0] = GetClientOfUserId(StringToInt(s_info));
+			GetClientName(i_targets[0], s_target_name, sizeof(s_target_name));
+			b_hits[0] = gh_enforcer.ForceTaunt(i_targets[0], i_idx);
+			
+			Notify_ForceTaunt(i_param1, i_idx, b_tn_is_ml, s_target_name, i_targets, b_hits, i_target_count, gh_cache);
+			MenuMaker_TauntOther_SelectTarget(i_param1, i_idx);
+		}
+		case MenuAction_Cancel:
+		{
+			if (i_param2 == MenuCancel_ExitBack)
+			{
+				MenuMaker_TauntOther_SelectTaunt(i_param1);
+			}
+		}
+		case MenuAction_End:
+		{
+			CloseHandle(GetDataFromInvisibleMenuItem(h_menu));
+			CloseHandle(h_menu);
+		}
+	}
+	return 0;
 }
 
 #if defined _tf2itemsinfo_included //{

@@ -123,4 +123,13 @@
 	{
 		"en"		"Usage"
 	}
+    
+	"tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle"
+	{
+		"en"		"Select a taunt"
+	}
+	"tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle"
+	{
+		"en"		"Select a target"
+	}
 }

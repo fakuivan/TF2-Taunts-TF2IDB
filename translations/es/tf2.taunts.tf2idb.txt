@@ -123,4 +123,13 @@
 	{
 		"es"		"Uso"
 	}
+    
+	"tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle"
+	{
+		"es"		"Seleccione una burla"
+	}
+	"tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle"
+	{
+		"es"		"Seleccione un jugador"
+	}
 }
