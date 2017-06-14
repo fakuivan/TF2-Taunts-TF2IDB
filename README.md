@@ -13,10 +13,14 @@ General usage:
 
 [![sm_taunt_force](https://img.youtube.com/vi/cvkLU5vt6qE/0.jpg)](https://www.youtube.com/watch?v=cvkLU5vt6qE)
 
+``sm_taunt_force`` menu:
+
+[![sm_taunt_force Menu](https://img.youtube.com/vi/fsmLmXHxIgE/0.jpg)](https://youtu.be/fsmLmXHxIgE)
+
 ### Commands
 * ``sm_taunt``/``sm_taunts``(``!taunt``/``!taunts`` from chat) If no arguments were given, it shows a taunt menu, if one argument is given it'll be interpreted as an Item Definition Index (aka taunt id). Example: ``sm_taunt 463`` Makes you taunt "Laugh Taunt", ``sm_taunt`` shows the taunt menu.
 * ``sm_taunt_list``/``sm_taunts_list``(``!taunt_list``/``!taunts_list`` from chat) Shows a list of available taunts, starting with its id, then the name and lastly the class that can use it.
-* ``sm_taunt_force``/``sm_taunts_force``(``!taunt_force``/``!taunts_force`` from chat) Given a target and a taunt id, it forces target to taunt.
+* ``sm_taunt_force``/``sm_taunts_force``(``!taunt_force``/``!taunts_force`` from chat) Given a target and a taunt id, it forces target to taunt. If no arguments are given, it shows a taunt and target selection menu.
 
 ### Example usage
 
