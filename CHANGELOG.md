@@ -1,3 +1,5 @@
+* [1.6](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.6) I like menus
+    * Add a menu for the ``sm_taunt_force`` ([#16](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/16)).
 * [1.5.2](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.2) 2Fast4UM8, sadly
     * Make this plugin call the item schema API once all pluigins are loaded fixing [#14](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/14)
 * [1.5.1](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.1) Minor updater fix
