@@ -53,7 +53,7 @@ public void OnAllPluginsLoaded()
 {
 #if defined _tf2idb_included //{
 	CTauntCacheSystem_FromTF2IDB_Error i_error;
-	gh_cache = CTauntCacheSystem.FromTF2IDB();
+	gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2IDB(), true);
 	if (i_error != CTauntCacheSystem_FromTF2IDB_Error_None)
 	{
 		gi_initialization = view_as<InitializationStatus>(i_error) + InitializationStatus_FromTF2IDB_Error;
@@ -67,7 +67,7 @@ public void OnAllPluginsLoaded()
 #if defined _tf2itemsinfo_included //{
 	if (TF2II_IsItemSchemaPrecached())
 	{
-		gh_cache = CTauntCacheSystem.FromTF2II();
+		gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2II(), true);
 	}
 #endif //}
 	Handle h_conf = LoadGameConfigFile("tf2.tauntem");
@@ -147,18 +147,18 @@ public Action Command_ListTaunts(int i_client, int i_args)
 		ReplyToCommand(i_client, "- %t: ", PLUGIN_SHORT_NAME ... "__taunts_list__TauntsForClassX", s_class);
 		for (int i_iter = 0; i_iter < GetArraySize(h_taunts_for_class); i_iter++)
 		{
-			int i_idx = gh_cache.GetTauntItemID(GetArrayCell(h_taunts_for_class, i_iter));
-			gh_cache.GetTauntName(GetArrayCell(h_taunts_for_class, i_iter), s_taunt_name, gh_cache.m_iMaxNameLength);
-			ReplyToCommand(i_client, "-  %d: %s (%s)", i_idx, s_taunt_name, s_class);
+			CTauntInfo i_taunt = GetArrayCell(h_taunts_for_class, i_iter);
+			i_taunt.GetName(s_taunt_name, gh_cache.m_iMaxNameLength);
+			ReplyToCommand(i_client, "-  %d: %s (%s)", i_taunt.m_iIDX, s_taunt_name, s_class);
 		}
 	}
 	
 	ReplyToCommand(i_client, "- %t:", PLUGIN_SHORT_NAME ... "__taunts_list__TauntsForAllClasses");
 	for (int i_iter = 0; i_iter < GetArraySize(gh_cache.m_hAllClassTaunts); i_iter++)
 	{
-		int i_idx = gh_cache.GetTauntItemID(GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter));
-		gh_cache.GetTauntName(GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter), s_taunt_name, gh_cache.m_iMaxNameLength);
-		ReplyToCommand(i_client, "-  %d: %s (%t)", i_idx, s_taunt_name, PLUGIN_SHORT_NAME ... "__taunts_list__AllClass");
+		CTauntInfo i_taunt = GetArrayCell(gh_cache.m_hAllClassTaunts, i_iter);
+		i_taunt.GetName(s_taunt_name, gh_cache.m_iMaxNameLength);
+		ReplyToCommand(i_client, "-  %d: %s (%t)", i_taunt.m_iIDX, s_taunt_name, PLUGIN_SHORT_NAME ... "__taunts_list__AllClass");
 	}
 	return Plugin_Handled;
 }
@@ -203,8 +203,7 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 	if (i_args == 2)
 	{
 		int i_taunt_idx = GetCmdArgInt(2);
-		int i_taunt_index;
-		if (!gh_cache.IsValidTaunt(i_taunt_idx, TFClass_Unknown, i_taunt_index))
+		if (CTauntInfo(i_taunt_idx) == INVALID_TAUNT)
 		{
 			ReplyToTauntTarget(i_client, TauntExecution_IvalidIDX);
 			return Plugin_Handled;
@@ -397,13 +396,13 @@ public int TF2II_OnItemSchemaUpdated()	//should this return ``void``?
 {
 	if (gh_cache == INVALID_HANDLE)
 	{
-		gh_cache = CTauntCacheSystem.FromTF2II();
+		gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2II(), true);
 	}
 	else
 	{
 		gh_cache.CloseChild();
 		gh_cache.Close();
-		gh_cache = CTauntCacheSystem.FromTF2II();
+		gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2II(), true);
 	}
 }
 #endif //}

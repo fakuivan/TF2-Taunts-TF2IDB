@@ -6,6 +6,15 @@
 #endif
 #define _tf2_taunt_menu_tf2idb_included
 
+// "headers" {
+enum CTauntCacheSystem {  }
+
+enum CTauntInfo {  }
+// }
+
+#define INVALID_TAUNT_CACHE_SYS	view_as<CTauntCacheSystem>(INVALID_HANDLE)
+#define INVALID_TAUNT			view_as<CTauntInfo>(-1)
+
 enum _CTauntCacheSystem_Storage {
 	_CTauntCacheSystem_Storage_ItemIDs = 0,
 	_CTauntCacheSystem_Storage_ClassBF,
@@ -188,9 +197,14 @@ methodmap CTauntCacheSystem < ArrayList {
 		return i_hits;
 	}
 	
-	public bool IsAllClass(int i_idx)
+	public int GetTauntClassBitMask(int i_index)
 	{
-		return GetArrayCell(GetArrayCellIndexAsAny(this, _CTauntCacheSystem_Storage_ClassBF), i_idx) == 0b1111111110;
+		return GetArrayCell(GetArrayCellIndexAsAny(this, _CTauntCacheSystem_Storage_ClassBF), i_index);
+	}
+	
+	public bool IsAllClass(int i_index)
+	{
+		return GetArrayCell(GetArrayCellIndexAsAny(this, _CTauntCacheSystem_Storage_ClassBF), i_index) == 0b1111111110;
 	}
 	
 	public bool IsValidTaunt(int i_idx, TFClassType i_class = TFClass_Unknown, int &i_index = 0)
@@ -231,6 +245,16 @@ methodmap CTauntCacheSystem < ArrayList {
 		}
 		CloseHandle(GetArrayCellIndexAsAny(this, _CTauntCacheSystem_Storage_ClassesArrays));
 	}
+	
+	public static CTauntCacheSystem GetSetGlobalInstance(CTauntCacheSystem h_set_to = INVALID_TAUNT_CACHE_SYS, bool b_force_set = false)
+	{
+		static CTauntCacheSystem h_global_instance;
+		if (h_set_to != INVALID_TAUNT_CACHE_SYS || b_force_set)
+		{
+			h_global_instance = h_set_to;
+		}
+		return h_global_instance;
+	}
 }
 
 #if defined _tf2idb_included //{
@@ -257,6 +281,65 @@ stock int TF2IDB_UsedByClasses_Compat(int i_id)
 	return i_bitmask;
 }
 #endif //}
+
+methodmap CTauntInfo {
+	public CTauntInfo(int i_idx, CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return view_as<CTauntInfo>(h_cache.FindTauntByDefIndex(i_idx));
+	}
+	
+	property int m_iIDX
+	{
+		public get() { return (CTauntCacheSystem.GetSetGlobalInstance()).GetTauntItemID(view_as<int>(this)); }
+	}
+	
+	property bool m_bAllClass
+	{
+		public get() { return (CTauntCacheSystem.GetSetGlobalInstance()).IsAllClass(view_as<int>(this));}
+	}
+	
+	property int m_iClassBitMask
+	{
+		public get() { return (CTauntCacheSystem.GetSetGlobalInstance()).GetTauntClassBitMask(view_as<int>(this));}
+	}
+	
+	public int GetClassBitMask(CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return h_cache.GetTauntClassBitMask(view_as<int>(this));
+	}
+	
+	public bool IsAllClass(CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return h_cache.IsAllClass(view_as<int>(this));
+	}
+	
+	public bool CanBeUsedByClass(TFClassType i_class, CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return (h_cache.GetTauntClassBitMask(view_as<int>(this)) & (1 << view_as<int>(i_class))) != 0;
+	}
+	
+	public int GetIDX(CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return h_cache.GetTauntItemID(view_as<int>(this));
+	}
+	
+	public int GetName(char[] s_name, int i_name_maxlen, CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return h_cache.GetTauntName(view_as<int>(this), s_name, i_name_maxlen);
+	}
+	
+	public int GetClasses(bool b_classes[TFClassType], CTauntCacheSystem h_cache = INVALID_TAUNT_CACHE_SYS)
+	{
+		h_cache = (h_cache == INVALID_TAUNT_CACHE_SYS) ? CTauntCacheSystem.GetSetGlobalInstance() : h_cache;
+		return h_cache.GetClasses(view_as<int>(this), b_classes);
+	}
+}
 
 stock any GetArrayCellIndexAsAny(Handle array, any index, int block=0, bool asChar=false)
 {

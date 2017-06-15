@@ -120,10 +120,10 @@ stock void Notify_ForceTaunt(	int i_client,
 								int i_nof_targets, 
 								CTauntCacheSystem h_cache)
 {
-	int i_taunt_index = h_cache.FindTauntByDefIndex(i_idx);
+	CTauntInfo i_taunt = CTauntInfo(i_idx, h_cache);
 	int i_hits;
 	char[] s_taunt_name = new char[h_cache.m_iMaxNameLength];
-	h_cache.GetTauntName(i_taunt_index, s_taunt_name, h_cache.m_iMaxNameLength);
+	i_taunt.GetName(s_taunt_name, h_cache.m_iMaxNameLength, h_cache);
 	for (int i_iter = 0; i_iter < i_nof_targets; i_iter++)
 	{
 		if (b_success[i_iter])
@@ -196,21 +196,21 @@ stock TauntExecution CheckClassToo(int i_target, int i_idx, CTauntCacheSystem h_
 	TauntExecution i_check_only_result;
 	if ((i_check_only_result = CheckOnly(i_target, i_class)) != TauntExecution_Success) { return i_check_only_result; }
 	
-	int i_index;
-	if (h_taunts.IsValidTaunt(i_idx, i_class, i_index))
+	CTauntInfo i_taunt = CTauntInfo(i_idx);
+	if (i_taunt != INVALID_TAUNT)
 	{
-		return TauntExecution_Success;
-	}
-	else
-	{
-		if (i_index != -1)	//if IsValidTaunt returns false but the index is not -1, the idx is valid, but the classes don't match
+		if (i_taunt.CanBeUsedByClass(i_class, h_taunts))
 		{
-			return TauntExecution_WrongClass;
+			return TauntExecution_Success;
 		}
 		else
 		{
-			return TauntExecution_IvalidIDX;
+			return TauntExecution_WrongClass;
 		}
+	}
+	else
+	{
+		return TauntExecution_IvalidIDX;
 	}
 }
 
@@ -292,9 +292,9 @@ stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem 
 	// Add all-class taunts first
 	for (int i_iter = 0; i_iter < GetArraySize(h_taunts.m_hAllClassTaunts); i_iter++)
 	{
-		int i_index = GetArrayCell(h_taunts.m_hAllClassTaunts, i_iter);
-		h_taunts.GetTauntName(i_index, s_name, i_name_maxlen);
-		Format(s_hex_idx, sizeof(s_hex_idx), "%x", h_taunts.GetTauntItemID(i_index));
+		CTauntInfo i_taunt = GetArrayCell(h_taunts.m_hAllClassTaunts, i_iter);
+		i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
+		Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
 		AddMenuItem(h_menu, s_hex_idx, s_name);
 	}
 	
@@ -308,9 +308,9 @@ stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem 
 			TF2_ClassEnumToString(i_current_class, s_class);
 			for (int i_iter = 0; i_iter < GetArraySize(h_taunts_for_class); i_iter++)
 			{
-				int i_taunt_internal_index = GetArrayCell(h_taunts_for_class, i_iter);
-				Format(s_hex_idx, sizeof(s_hex_idx), "%x", h_taunts.GetTauntItemID(i_taunt_internal_index));
-				h_taunts.GetTauntName(i_taunt_internal_index, s_name, h_taunts.m_iMaxNameLength);
+				CTauntInfo i_taunt = GetArrayCell(h_taunts_for_class, i_iter);
+				Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
+				i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
 				AddFormattedMenuItem(h_menu, s_hex_idx, ITEMDRAW_DEFAULT, "%s (%s)", s_name, s_class);
 			}
 		}
@@ -320,9 +320,9 @@ stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem 
 		ArrayList h_list_for_class = h_taunts.GetListForClass(i_class);
 		for (int i_iter = 0; i_iter < GetArraySize(h_list_for_class); i_iter++)
 		{
-			int i_index = GetArrayCell(h_list_for_class, i_iter);
-			h_taunts.GetTauntName(i_index, s_name, i_name_maxlen);
-			Format(s_hex_idx, sizeof(s_hex_idx), "%x", h_taunts.GetTauntItemID(i_index));
+			CTauntInfo i_taunt = GetArrayCell(h_list_for_class, i_iter);
+			i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
+			Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
 			AddMenuItem(h_menu, s_hex_idx, s_name);
 		}
 	}
