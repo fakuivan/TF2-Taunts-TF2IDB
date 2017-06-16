@@ -356,6 +356,12 @@ public int MenuHandler_TauntOther_SelectTarget(Menu h_menu, MenuAction i_action,
 				strcopy(s_target_name, sizeof(s_target_name), gs_target_symbols_ml[i_target_symbol]);
 				
 				i_target_count = FindValidTauntTargets(i_param1, i_targets, MaxClients, i_idx, gh_cache);
+				if (i_target_count < 1)
+				{
+					ReplyToTargetError(i_param1, COMMAND_TARGET_EMPTY_FILTER);
+					MenuMaker_TauntOther_SelectTarget(i_param1, i_idx);
+					return 0;
+				}
 				gh_enforcer.ForceTauntMultiple(i_targets, b_hits, i_target_count, i_idx);
 			}
 			else if (i_target_symbol == INVALID_TARGET_SYMBOL)
