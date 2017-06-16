@@ -256,7 +256,8 @@ bool MenuMaker_TauntsMenu(int i_client, MenuHandler f_handler, any a_data = 0)
 	
 	SetMenuTitle(h_menu, "%T", PLUGIN_SHORT_NAME ... "__menu__title", i_client);
 	
-	AddTauntsToMenu(h_menu, i_class, gh_cache);
+	AddTauntsByClassToMenu(h_menu, i_class, gh_cache, true);
+	AddTauntsByClassToMenu(h_menu, TFClass_Unknown, gh_cache, false);
 	AddDataToMenuAsInvisibleItem(h_menu, a_data);
 	
 	return DisplayMenu(h_menu, i_client, MENU_TIME_FOREVER);
@@ -283,7 +284,11 @@ bool MenuMaker_TauntOther_SelectTaunt(int i_client)
 	SetMenuTitle(h_menu, "%T:", PLUGIN_SHORT_NAME ... "__taunt_force_menu__TauntsTitle", i_client);
 	SetMenuExitBackButton(h_menu, false);
 	
-	AddTauntsToMenu(h_menu, TFClass_Unknown, gh_cache);
+	AddTauntsByClassToMenu(h_menu, TFClass_Unknown, gh_cache, false);
+	for (TFClassType i_class = view_as<TFClassType>(1); i_class < TFClassType; i_class++)
+	{
+		AddTauntsByClassToMenu(h_menu, i_class, gh_cache, true);
+	}
 	
 	return h_menu.Display(i_client, MENU_TIME_FOREVER);
 }

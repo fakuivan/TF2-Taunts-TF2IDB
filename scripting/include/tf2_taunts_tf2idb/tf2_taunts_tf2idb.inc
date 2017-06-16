@@ -283,48 +283,20 @@ stock any GetDataFromInvisibleMenuItem(Handle h_menu, bool b_last_position = tru
 	return view_as<any>(StringToInt(s_data, 16));
 }
 
-stock int AddTauntsToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem h_taunts)
+stock void AddTauntsByClassToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem h_taunts, bool b_specify_class)
 {
-	int i_name_maxlen = h_taunts.m_iMaxNameLength;
-	char[] s_name = new char[i_name_maxlen];
+	char[] s_name = new char[h_taunts.m_iMaxNameLength];
 	char s_hex_idx[INT_HEX_LENGTH];
+	char s_class[TF_MAX_CLASS_NAME_LENGTH];
+	if (b_specify_class) { TF2_ClassEnumToString(i_class, s_class); }
 	
-	// Add all-class taunts first
-	for (int i_iter = 0; i_iter < GetArraySize(h_taunts.m_hAllClassTaunts); i_iter++)
+	ArrayList h_taunt_list = (i_class == TFClass_Unknown) ? h_taunts.m_hAllClassTaunts : h_taunts.GetListForClass(i_class);
+	for (int i_iter = 0; i_iter < GetArraySize(h_taunt_list); i_iter++)
 	{
-		CTauntInfo i_taunt = GetArrayCell(h_taunts.m_hAllClassTaunts, i_iter);
-		i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
+		CTauntInfo i_taunt = GetArrayCell(h_taunt_list, i_iter);
+		i_taunt.GetName(s_name, h_taunts.m_iMaxNameLength, h_taunts);
 		Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
-		AddMenuItem(h_menu, s_hex_idx, s_name);
-	}
-	
-	if (i_class == TFClass_Unknown)
-	{
-		char s_class[TF_MAX_CLASS_NAME_LENGTH];
-	
-		for (TFClassType i_current_class = view_as<TFClassType>(view_as<int>(TFClassType) - 1); view_as<int>(i_current_class) > 0; i_current_class--)
-		{
-			ArrayList h_taunts_for_class = h_taunts.GetListForClass(i_current_class);
-			TF2_ClassEnumToString(i_current_class, s_class);
-			for (int i_iter = 0; i_iter < GetArraySize(h_taunts_for_class); i_iter++)
-			{
-				CTauntInfo i_taunt = GetArrayCell(h_taunts_for_class, i_iter);
-				Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
-				i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
-				AddFormattedMenuItem(h_menu, s_hex_idx, ITEMDRAW_DEFAULT, "%s (%s)", s_name, s_class);
-			}
-		}
-	}
-	else
-	{
-		ArrayList h_list_for_class = h_taunts.GetListForClass(i_class);
-		for (int i_iter = 0; i_iter < GetArraySize(h_list_for_class); i_iter++)
-		{
-			CTauntInfo i_taunt = GetArrayCell(h_list_for_class, i_iter);
-			i_taunt.GetName(s_name, i_name_maxlen, h_taunts);
-			Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
-			AddMenuItem(h_menu, s_hex_idx, s_name);
-		}
+		AddFormattedMenuItem(h_menu, s_hex_idx, ITEMDRAW_DEFAULT, b_specify_class ? "%s (%s)" : "%s" , s_name, s_class);
 	}
 }
 
