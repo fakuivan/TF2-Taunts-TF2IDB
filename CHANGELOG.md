@@ -1,3 +1,6 @@
+* [1.6.1](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.6.1) I like better menus
+	* Class-specific taunts are back on top of the list for ``sm_taunt``, ([#19](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/19)) along with class labels ([#18](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/18)).
+	* Fix plugin not checking if target filter matches no clients, attempting to give taunts to entity 0 (world/"console"), under the ``sm_taunt_force`` menu ([#17](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/17)).
 * [1.6](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.6) I like menus
     * Add a menu for the ``sm_taunt_force`` ([#16](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/16)).
 * [1.5.2](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.5.2) 2Fast4UM8, sadly
