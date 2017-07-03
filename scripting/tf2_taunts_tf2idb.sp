@@ -53,7 +53,7 @@ public void OnAllPluginsLoaded()
 {
 #if defined _tf2idb_included //{
 	CTauntCacheSystem_FromTF2IDB_Error i_error;
-	gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2IDB(), true);
+	gh_cache = CTauntCacheSystem.GetSetGlobalInstance(CTauntCacheSystem.FromTF2IDB(i_error), true);
 	if (i_error != CTauntCacheSystem_FromTF2IDB_Error_None)
 	{
 		gi_initialization = view_as<InitializationStatus>(i_error) + InitializationStatus_FromTF2IDB_Error;
