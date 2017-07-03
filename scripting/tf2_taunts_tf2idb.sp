@@ -3,7 +3,9 @@
  #include "tf2itemsinfo.inc"
 #else
  #define _USING_ITEMS_HELPER	"tf2idb"
+ #undef REQUIRE_PLUGIN
  #include "tf2idb.inc"
+ #define REQUIRE_PLUGIN
 #endif
 #include "tf2items.inc"
 #undef REQUIRE_PLUGIN
@@ -58,7 +60,11 @@ public void OnAllPluginsLoaded()
 	{
 		gi_initialization = view_as<InitializationStatus>(i_error) + InitializationStatus_FromTF2IDB_Error;
 	}
-	if (gi_initialization >= InitializationStatus_FromTF2IDB_Error)
+	if (i_error == CTauntCacheSystem_FromTF2IDB_Error_TF2IDBNotLoaded)
+	{
+		LogError("Failed to initialize taunt cache: TF2IDB Not loaded.");
+	}
+	else if (gi_initialization >= InitializationStatus_FromTF2IDB_Error)
 	{
 		LogError("Failed to initialize taunt cache, error code %d", gi_initialization - InitializationStatus_FromTF2IDB_Error);
 	}

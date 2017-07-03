@@ -29,6 +29,7 @@ enum CTauntCacheSystem_FromTF2IDB_Error {
 	CTauntCacheSystem_FromTF2IDB_Error_None = 0,
 	CTauntCacheSystem_FromTF2IDB_Error_FindIDs,
 	CTauntCacheSystem_FromTF2IDB_Error_FindMaxNameLength,
+	CTauntCacheSystem_FromTF2IDB_Error_TF2IDBNotLoaded,
 }
 #endif
 
@@ -78,11 +79,16 @@ methodmap CTauntCacheSystem < ArrayList {
 #if defined _tf2idb_included //{
 	public static CTauntCacheSystem FromTF2IDB(CTauntCacheSystem_FromTF2IDB_Error &i_error = CTauntCacheSystem_FromTF2IDB_Error_None)
 	{
+		if (!LibraryExists("tf2idb"))
+		{
+			i_error = CTauntCacheSystem_FromTF2IDB_Error_TF2IDBNotLoaded;
+			return INVALID_TAUNT_CACHE_SYS;
+		}
 		ArrayList h_idxs = view_as<ArrayList>(TF2IDB_FindItemCustom("SELECT `id` FROM tf2idb_item WHERE `slot` IS 'taunt'"));
 		if (h_idxs == INVALID_HANDLE)
 		{
 			i_error = CTauntCacheSystem_FromTF2IDB_Error_FindIDs;
-			return view_as<CTauntCacheSystem>(INVALID_HANDLE);
+			return INVALID_TAUNT_CACHE_SYS;
 		}
 		int i_nof_items = GetArraySize(h_idxs);
 		
@@ -91,7 +97,7 @@ methodmap CTauntCacheSystem < ArrayList {
 		{
 			i_error = CTauntCacheSystem_FromTF2IDB_Error_FindMaxNameLength;
 			CloseHandle(h_idxs);
-			return view_as<CTauntCacheSystem>(INVALID_HANDLE);
+			return INVALID_TAUNT_CACHE_SYS;
 		}
 		int i_name_maxlength = GetArrayCell(h_name_maxlength, 0); CloseHandle(h_name_maxlength);
 		
@@ -263,6 +269,12 @@ methodmap CTauntCacheSystem < ArrayList {
 //if you know a better way to do this, let me know plz
 stock int TF2IDB_UsedByClasses_Compat(int i_id)
 {
+	if (GetFeatureStatus(FeatureType_Native, "TF2IDB_UsedByClasses") == FeatureStatus_Available)
+	{
+		//you'r include needs to declare ``TF2IDB_UsedByClasses`` for this to compile correctly,
+		//and have ``REQUIRE_PLUGIN`` undefined.
+		return TF2IDB_UsedByClasses(i_id);
+	}
 	char s_query[255 /* the query without the id is ~249 chars */ - 2 + 12];
 	
 	Format(s_query, sizeof(s_query), 
