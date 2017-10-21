@@ -1,3 +1,7 @@
+* [1.6.3](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.6.3) Gamedata update, minor improvements
+	* Gamedata updated ([#23](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/23)). 
+	* Cache initialization failure for the [TF2IDB](https://github.com/FlaminSarge/tf2idb) (while quite rare) was never treated as such, allowing the plugin to just move on with invalid values ([#21](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/21)). 
+	* Now the ``TF2IDB_UsedByClasses_Compat`` wrapper calls ``TF2IDB_UsedByClasses`` directly, improving load times on newer versions of [TF2IDB](https://github.com/FlaminSarge/tf2idb) ([#22](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/22)). 
 * [1.6.1](https://github.com/fakuivan/TF2-Taunts-TF2IDB/releases/tag/1.6.1) I like better menus
 	* Class-specific taunts are back on top of the list for ``sm_taunt``, ([#19](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/19)) along with class labels ([#18](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/18)).
 	* Fix plugin not checking if target filter matches no clients, attempting to give taunts to entity 0 (world/"console"), under the ``sm_taunt_force`` menu ([#17](https://github.com/fakuivan/TF2-Taunts-TF2IDB/issues/17)).

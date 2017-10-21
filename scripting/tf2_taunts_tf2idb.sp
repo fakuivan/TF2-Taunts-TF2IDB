@@ -32,7 +32,7 @@
 #if defined _autoversioning_included
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "-" ... _USING_ITEMS_HELPER
 #else
- #define PLUGIN_VERSION "1.6.1" ... "." ... "*" ... "-" ... _USING_ITEMS_HELPER
+ #define PLUGIN_VERSION "1.6.3" ... "." ... "*" ... "-" ... _USING_ITEMS_HELPER
 #endif
 
 public Plugin myinfo = 
