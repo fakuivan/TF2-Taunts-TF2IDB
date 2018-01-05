@@ -11,112 +11,133 @@ addons:
             # We need at least python3.4 to run our custom deployment scripts
             - python3.5
 
+# Clone complete repo
+git:
+    depth: false
+
 # Set the build environment
 env:
     global:
-        - PROJECT_SHORTNAME="tf2_taunts_tf2idb"
-        - UPDATER_REPO="sm_updater_plugins"
-        - UPDATER_USER="fakuivan"
-        - UPDATER_USER_NAME="$UPDATER_USER"
-        - UPDATER_USER_EMAIL="$UPDATER_USER@gmail.com"
-        - URL="https://github.com/$UPDATER_USER/TF2-Taunts-TF2IDB"
-        #UPDATER_REPO_OAUTH
+        - TR_COMP_STABLE_VERSION="1.8"
+        # ``UPDATER_REPO_OAUTH``
         - secure: "WtXF+/fPglmoDnI1l0fGnUmC8zrYxaaHdpG3IwKD95o/hUnSk4L0kfFvxhqDIqmhZOAFpdERnmpo1IrdR/LoTO5htO+5qZ+fmaDh5He7EbaNAaafOVaDKJ4GTj+HPYah8gVodvkzKOOqi5fnGekaKa9Fv8G0WEDcikIJ59HQ6yaGx6Jh/ct7G7OfY1nGhvj5frSBGK4PiPvtuC8w1GOvzamRGAebQ7BZzHcr50TvA8WzsSb/wcPdhRKbb0Q85E0L6ndXVt7pTYtzhFq84LIQTCjYWV3126+fjehoCK8V4isFqwYcrISft6UTpEGJ7U2J4V7h7lvxuqOZG6+m+sKPm8QIsopeiHPLOin7X+ye50k/Hhdkw2YS+x4hQBYntW6loop0gfNxb7OCy+P3dZxmExlc2yH/lLX0rcPStdP7f0hcj4RT3yH4e467ZvW2UI0V0YlQvMUpQeOPEGLfTBw4zd2hdwY7WSjf8y0DN7ThZ2Rf62pIMTW3fBzp6NmVXaik7vd/ryvx0kmjih8HNxuO46SUfcMfpNyHwL2QRUbp1mPiVk2pJzaehhYGLRxI2z6XJ+3/+S/UzGWz/d+D8pvbWqKcNLLyh8B1el/nQ40OQQoQipWjudHRBryy4JcNDbDPKAqC7cW10AENTl1P8TOQAQsURyiHaISrhvRK53TX7PQ="
     matrix:
-        - SMVERSION=1.8 CACHE_BUILDER=tf2idb
-        - SMVERSION=1.8 CACHE_BUILDER=tf2ii
-        - SMVERSION=1.9 CACHE_BUILDER=tf2idb
-        - SMVERSION=1.9 CACHE_BUILDER=tf2ii
+        - TR_COMP_VERSION=1.8 TR_RELEASE_CACHE_BUILDER=tf2idb
+        - TR_COMP_VERSION=1.8 TR_RELEASE_CACHE_BUILDER=tf2ii
+        - TR_COMP_VERSION=1.9 TR_RELEASE_CACHE_BUILDER=tf2idb
+        - TR_COMP_VERSION=1.9 TR_RELEASE_CACHE_BUILDER=tf2ii
 
 # Allow the experimental branch to fail
 matrix:
     fast_finish: true
     allow_failures:
-        - env: SMVERSION=1.9
+        - env: TR_COMP_VERSION=1.9
 
 install:
-    - wget --input-file=http://sourcemod.net/smdrop/$SMVERSION/sourcemod-latest-linux
-    - tar -xzf $(cat sourcemod-latest-linux)
-    - COMPILE_SOURCEMOD_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod"
-    - COMPILE_SCRIPTING_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod/scripting"
+    - |
+      tr_eval_on_project_config () { 
+          (
+              PROJECT_ROOT="$TR_PROJECT_ROOT"; 
+              BUILD_OPTION="$TR_PROJECT_BUILD_OPTION"; 
+              COMP_ROOT="$TR_SM_COMPILER_DIR"; 
+              source "$TR_PROJECT_ROOT/spbb_config.sh" && eval "$@"
+          ); 
+          return $?; 
+      }
     
-    - wget https://raw.githubusercontent.com/asherkin/TF2Items/master/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
-    - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/master/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
-    - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/master/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
-    - wget https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc -O $COMPILE_SCRIPTING_FOLDER/include/updater.inc
+    # For all of these procedures, we'll avoid using ``TR_PROJECT_BUILD_OPTION``, build options don't
+    # affect the build environment. 
+    - TR_PROJECT_ROOT="$TRAVIS_BUILD_DIR"; cd "$TR_PROJECT_ROOT"
+    - TR_PROJECT_BUILDTOOLS_PATH="$(tr_eval_on_project_config echo '$PROJECT_BUILDTOOLS_PATH')"
+    - chmod +x "$TR_PROJECT_BUILDTOOLS_PATH/spbbuilder/spbbuilder.sh"
     
-    - COMMIT_NUMBER=$(git rev-list --count HEAD)
-    - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
-    - VERSION="$TAG.$COMMIT_NUMBER-$CACHE_BUILDER"
+    - TR_PACKAGE_DIR="$(tr_eval_on_project_config echo '$PACKAGE_PATH')"
+    - TR_SM_LIB_DIR="$TR_PACKAGE_DIR/lib"; mkdir -p "$TR_SM_LIB_DIR"
+    
+    - cd "$TR_SM_LIB_DIR"
+    - wget "--input-file=http://sourcemod.net/smdrop/$TR_COMP_VERSION/sourcemod-latest-linux"
+    - tar -xzf "$(cat sourcemod-latest-linux)"
+    - cd "$TR_PROJECT_ROOT"
+    - TR_SM_COMPILER_DIR="$TR_SM_LIB_DIR/addons/sourcemod/scripting"
+    - chmod +x "$TR_SM_COMPILER_DIR/spcomp"
 
 before_script:
-    #Tagged releases only count if this is the master branch, else only updater releases will be used
-    - if [ "$TRAVIS_BRANCH" = "$TAG" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
-    - if [ "$TRAVIS_BRANCH" = "updater" ]; then UPDATER_BRANCH='master'; fi
-    - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
-    - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
-    - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
+    - TR_PROJECT_BUILD_OPTION="$(tr_eval_on_project_config 
+        source "$TR_PROJECT_BUILDTOOLS_PATH/spbbuilder/tools/misc.sh" '&&' 
+        find_string_at_index "$TR_RELEASE_CACHE_BUILDER" '${PROJECT_BUILD_OPTIONS[@]}')"
+    - TR_RELEASE_TAG="$(source "$TR_PROJECT_BUILDTOOLS_PATH/spbbuilder/tools/git.sh" && 
+        git_get_latest_tag "$TR_PROJECT_ROOT")"
+    - TR_RELEASE_COMMIT="$(source "$TR_PROJECT_BUILDTOOLS_PATH/spbbuilder/tools/git.sh" && 
+        git_get_commit_number "$TR_PROJECT_ROOT")"
+    # If the latest tag and the travis branch are the same, the build was triggered by tags, 
+    # these correspond to master, which is the only branch that can trigger tagged releases ATM.
+    # If that is not the case, the variable ``TRAVIS_BRANCH`` will contain the real branch name.
+    - |
+      if [[ "$TRAVIS_BRANCH" == "$TR_RELEASE_TAG" ]]; then
+          TR_RELEASE_REAL_BRANCH='master'; 
+      else 
+          TR_RELEASE_REAL_BRANCH="$TRAVIS_BRANCH"; 
+      fi
+    - TR_UPDATER_BRANCH=$(tr_eval_on_project_config updater_format_branch "$TR_RELEASE_REAL_BRANCH"); TR_UPDATER_VALID_BRANCH=$?
     
-    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$UPDATER_BRANCH/$PROJECT_SHORTNAME_COMPLETE/updater.txt"
-    
-    - python3.5 "$VERSION_SCRIPTS_PATH/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TAG"
-    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_link_helper.py" --include_dir "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" --url "$UPDATER_URL"
-    - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
-    - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
-    - mkdir "$TRAVIS_BUILD_DIR/plugins"
-    - FILE=tf2_taunts_tf2idb-n$COMMIT_NUMBER-$CACHE_BUILDER.zip
-    - if [ "$CACHE_BUILDER" = "tf2ii" ]; then EXTRA_ARGS='_USE_TF2II_INSTEAD_OF_TF2IDB='; else EXTRA_ARGS=''; fi
+    - |
+      if [[ "$TR_COMP_VERSION" == "$TR_COMP_STABLE_VERSION" && "$TR_UPDATER_VALID_BRANCH" -eq 0 && "$TR_RELEASE_REAL_BRANCH" != 'master' ]]; then 
+          TR_UPDATER_DO_DEPLOY=0;
+      else
+          TR_UPDATER_DO_DEPLOY=1;
+      fi
 
-# And compile!
+# And build!
 script: 
-    - $COMPILE_SCRIPTING_FOLDER/spcomp $COMPILE_SCRIPTING_FOLDER/tf2_taunts_tf2idb.sp -o$TRAVIS_BUILD_DIR/plugins/tf2_taunts_tf2idb.smx $EXTRA_ARGS
+    - (export PROJECT_BRANCH="$TR_RELEASE_REAL_BRANCH" && 
+      "$TR_PROJECT_BUILDTOOLS_PATH/spbbuilder/spbbuilder.sh" -c "$TR_SM_COMPILER_DIR" -r "$TR_PROJECT_ROOT" -s -o "$TR_RELEASE_CACHE_BUILDER")
 
 before_deploy:
-    - cd $TRAVIS_BUILD_DIR
-    - PACKAGE_DIRS[0]="./plugins/"
-    - PACKAGE_DIRS[1]="./scripting/" 
-    - PACKAGE_DIRS[2]="./translations/" 
-    - PACKAGE_DIRS[3]="./gamedata/" 
-    - zip -r $FILE ${PACKAGE_DIRS[*]}
-    
-    - PACKAGE_PATH="$TRAVIS_BUILD_DIR/.package_updater"
-    
-    - rm -rf "$PACKAGE_PATH/"
-    - mkdir "$PACKAGE_PATH/"
-    - cp -r ${PACKAGE_DIRS[*]} "$PACKAGE_PATH/"
-    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_script_gen.py" --sm_path "$PACKAGE_PATH" --version "$VERSION" --notes "Version $VERSION is out!" "Go to $URL to see the changes" --output "$PACKAGE_PATH/updater.txt"
-    - chmod +x "$UPDATER_SCRIPTS_PATH/deploy.sh"
+    - TR_UPDATER_SCRIPTS_PATH="$TR_PROJECT_BUILDTOOLS_PATH/tony_updater"
+    - chmod +x "$TR_UPDATER_SCRIPTS_PATH/deploy.sh"
+
+    - TR_RELEASE_VERSION="$(tr_eval_on_project_config project_format_version_string "$TR_RELEASE_TAG" "$TR_RELEASE_COMMIT")"
+    - TR_RELEASE_NAME="$(tr_eval_on_project_config project_format_release_name)"
+
+    - TR_RELEASE_FILE="$(tr_eval_on_project_config package_format_archive_path "$TR_RELEASE_TAG" "$TR_RELEASE_COMMIT")"
+    - TR_PACKAGE_ROOT_PATH="$(tr_eval_on_project_config echo '$PACKAGE_ROOT_PATH')"
+    - TR_UPDATER_SCRIPT_WD="$TR_PROJECT_ROOT"
+    - ln -s "$TR_PACKAGE_ROOT_PATH" "$TR_UPDATER_SCRIPT_WD/.package_updater"
 
 deploy:
     - provider: releases
       api_key:
           secure: cfmiJb0kZfusm8RU2CJmKvDQPByXPqA1YxKeGCOnJlXY55pvJwMB+iqGW5zmxAOfv4x9H4LAdUstc7TOnGtw06hqrOEPsUTIo58uZqnZbNI6VyhMajdTHrLe/FPLeUbPu4f4AVU9KuSgi/td+6yzXuyQ4ZjFJoZYwBWKAmNGKEv2QQgSIKA0/BxsAfSQEHkwJd27HrRjwWdvCIF7oEDf2TAFdYOt9CvAgj7ARsW4st6z7aRf9TmGb3yEUkTm3JkU/LIVK6t77+o4X7MVorgDD6f7QWIzyjVFg/A9tkYOK/xIn2TXj82y2cvEzQGT9aKsHWt/IHWnSJej6DvBwP+dZEVGQHvVn2GfEJXAyrT+jacPWpbC8FOddiw/SSQFfACI8s6F52koNpSDxJmeihPc0Kynk46o/fed/Vg5Mb+hKl8CNJvee5Izsxty+mYVQoK+aHrXZPyPbm4WbeL+chGoU3O36VbFvTXMA5fN+Ot4vwGsxutXbImva8IHYmW5LNT+2d1Z57sbGf0bgEjeozE8shHHQwHECVLRGIXmzYtoWFjvtmLbt2CC9vYjooKjQv7+wjGSrya2u61rWC8w2BaJnzdguXroU+0TaIdzdDrC85r9VttcvEOWNLROTf+7Fgxq/dAyvfyz3pw2Noh8zyr3RUrXfLWhCLagLoeZ93agNUY=
-      file: $FILE
+      file: $TR_RELEASE_FILE
       skip_cleanup: true
       on:
-          #only deploy for the stable branch
-          condition: $SMVERSION = 1.8
+          # Only deploy for the stable branch
+          condition: '"$TR_COMP_VERSION" == "$TR_COMP_STABLE_VERSION"'
           repo: fakuivan/TF2-Taunts-TF2IDB
           branch: master
           tags: true
         
     - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
+      script: 
+              'cd "$TR_UPDATER_SCRIPT_WD" && 
+              "$TR_UPDATER_SCRIPTS_PATH/deploy.sh" 
+                  "$TR_RELEASE_NAME" 
+                  "$TR_RELEASE_VERSION" 
+                  "$(tr_eval_on_project_config echo ''$UPDATER_REPO'')" 
+                  "$(tr_eval_on_project_config echo ''$UPDATER_USER'')"
+                  "$UPDATER_REPO_OAUTH"
+                  "$(tr_eval_on_project_config echo ''$UPDATER_USER_NAME'')"
+                  "$(tr_eval_on_project_config echo ''$UPDATER_USER_EMAIL'')"
+                  "$TR_UPDATER_BRANCH"'
       skip_cleanup: true
       on:
+          all_branches: true
           repo: fakuivan/TF2-Taunts-TF2IDB
-          branch: updater_test
-          condition: $SMVERSION = 1.8
-          tags: false
-        
-    - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
-      skip_cleanup: true
-      on:
-          repo: fakuivan/TF2-Taunts-TF2IDB
-          branch: updater
-          condition: $SMVERSION = 1.8
-          #one must only commit (rebase) this branch before making a tag to get coherent release versions
+          # Allowed branches and their mappings can be found at ``updater_format_branch`` on "spbb_config.sh"
+          #branch: updater
+          # If this branch is allowed to trigger sourcemod updater releases and the compiler version is stable, 
+          # ``TR_UPDATER_DO_DEPLOY`` will need to be set to true. 
+          condition: '"$TR_UPDATER_DO_DEPLOY" == 0'
           tags: false
 
 # Notifications

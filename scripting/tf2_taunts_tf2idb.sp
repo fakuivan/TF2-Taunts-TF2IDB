@@ -1,13 +1,13 @@
 #if defined _USE_TF2II_INSTEAD_OF_TF2IDB
  #define _USING_ITEMS_HELPER	"tf2ii"
- #include "tf2itemsinfo.inc"
+ #include <tf2itemsinfo>
 #else
  #define _USING_ITEMS_HELPER	"tf2idb"
  #undef REQUIRE_PLUGIN
- #include "tf2idb.inc"
+ #include <tf2idb>
  #define REQUIRE_PLUGIN
 #endif
-#include "tf2items.inc"
+#include <tf2items>
 #undef REQUIRE_PLUGIN
 #include <updater>
 #define REQUIRE_PLUGIN
@@ -20,14 +20,14 @@
 
 #define PLUGIN_SHORT_NAME "tf2_taunts_tf2idb"
 
-#include "tf2_taunts_tf2idb/taunt_cache_system.inc"
-#include "tf2_taunts_tf2idb/taunt_enforcer.inc"
-#include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
-#include "tf2_taunts_tf2idb/autoversioning.inc"
-#include "tf2_taunts_tf2idb/updater_helpers.inc"
-#include "tf2_taunts_tf2idb/target_symbols.inc"
+#include <tf2_taunts_tf2idb/taunt_cache_system.inc>
+#include <tf2_taunts_tf2idb/taunt_enforcer.inc>
+#include <tf2_taunts_tf2idb/tf2_extra_stocks.inc>
+#include <tf2_taunts_tf2idb/autoversioning.inc>
+#include <tf2_taunts_tf2idb/updater_helpers.inc>
+#include <tf2_taunts_tf2idb/target_symbols.inc>
 
-#include "tf2_taunts_tf2idb/tf2_taunts_tf2idb.inc"
+#include <tf2_taunts_tf2idb/tf2_taunts_tf2idb.inc>
 
 #if defined _autoversioning_included
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "-" ... _USING_ITEMS_HELPER
