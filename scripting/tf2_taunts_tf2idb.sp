@@ -35,7 +35,7 @@
  #define PLUGIN_VERSION "1.6.3" ... "." ... "*" ... "-" ... _USING_ITEMS_HELPER
 #endif
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
 	name = "TF2 Taunts TF2IDB",
 	author = "fakuivan",
@@ -88,7 +88,7 @@ public void OnAllPluginsLoaded()
 			gi_initialization = InitializationStatus_InvalidGamedataOutdated;
 		}
 	}
-	
+
 	if (gi_initialization == InitializationStatus_InvalidGamedataFile)
 	{
 		LogError("Unable to load gamedata/tf2.tauntem.txt.");
@@ -97,7 +97,7 @@ public void OnAllPluginsLoaded()
 	{
 		LogError("Unable to initialize CTauntEnforcer, gamedata files outdated.");
 	}
-	
+
 	if (LibraryExists("updater"))
 	{
 		if (gi_initialization != InitializationStatus_Success)
@@ -111,14 +111,16 @@ public void OnAllPluginsLoaded()
 		LogError("Halting user interface initialization. Plugin loaded but updater not found.");
 		LogError("Try using the latest version from here https://github.com/fakuivan/TF2-Taunts-TF2IDB .");
 	}
-	
+
 	CreateConVar("sm_" ... PLUGIN_SHORT_NAME ... "_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	
+
 	if (gi_initialization == InitializationStatus_Success)
 	{
+		ActivateForwards();
+
 		LoadTranslations("common.phrases");
 		LoadTranslations("tf2.taunts.tf2idb");
-		
+
 		RegConsoleCmd("sm_taunts_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
 		RegConsoleCmd("sm_taunt_list", Command_ListTaunts, "Shows a list of taunts ordered by class");
 		RegConsoleCmd("sm_taunts", Command_ForceSelfToTaunt, "Shows the taunts menu");
@@ -126,6 +128,14 @@ public void OnAllPluginsLoaded()
 		RegAdminCmd("sm_taunts_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
 		RegAdminCmd("sm_taunt_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
 	}
+}
+
+public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
+{
+	RegPluginLibrary("tf2_taunts_tf2idb");
+	CreateNative("RegisterTauntEnforcer", Native_RegisterTauntEnforcer);
+
+	return APLRes_Success;
 }
 
 public void OnLibraryAdded(const char[] s_name)
@@ -141,11 +151,11 @@ public Action Command_ListTaunts(int i_client, int i_args)
 #if defined _tf2itemsinfo_included //{
 	if (CheckAndReplyCacheNotLoaded(i_client))return Plugin_Handled;
 #endif //}
-	
+
 	ReplyToCommand(i_client, "[SM] %t:", PLUGIN_SHORT_NAME ... "__taunts_list__ListOfTaunts");
 	char[] s_taunt_name = new char[gh_cache.m_iMaxNameLength];
 	char s_class[TF_MAX_CLASS_NAME_LENGTH];
-	
+
 	for (TFClassType i_class = view_as<TFClassType>(view_as<int>(TFClassType) - 1); view_as<int>(i_class) > 0; i_class--)
 	{
 		ArrayList h_taunts_for_class = gh_cache.GetListForClass(i_class);
@@ -158,7 +168,7 @@ public Action Command_ListTaunts(int i_client, int i_args)
 			ReplyToCommand(i_client, "-  %d: %s (%s)", i_taunt.m_iIDX, s_taunt_name, s_class);
 		}
 	}
-	
+
 	ReplyToCommand(i_client, "- %t:", PLUGIN_SHORT_NAME ... "__taunts_list__TauntsForAllClasses");
 	for (int i_iter = 0; i_iter < GetArraySize(gh_cache.m_hAllClassTaunts); i_iter++)
 	{
@@ -214,15 +224,15 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 			ReplyToTauntTarget(i_client, TauntExecution_IvalidIDX);
 			return Plugin_Handled;
 		}
-		
+
 		char s_target[MAX_NAME_LENGTH];
 		GetCmdArg(1, s_target, sizeof(s_target));
-		
+
 		char s_target_name[MAX_TARGET_LENGTH];
 		int i_target_list[MAXPLAYERS], i_target_count;
 		bool b_target_hits[MAXPLAYERS];
 		bool b_tn_is_ml;
-	 
+
 		if ((i_target_count = ProcessTargetString(
 				s_target,
 				i_client,
@@ -236,7 +246,7 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 			ReplyToTargetError(i_client, i_target_count);
 			return Plugin_Handled;
 		}
-		
+
 		gh_enforcer.ForceTauntMultiple(i_target_list, b_target_hits, i_target_count, i_taunt_idx);
 		Notify_ForceTaunt(i_client, i_taunt_idx, b_tn_is_ml, s_target_name, i_target_list, b_target_hits, i_target_count, gh_cache);
 	}
@@ -247,7 +257,7 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 	else
 	{
 		ReplyToCommand(i_client, i_client == 0 	? "%t: sm_taunt_force <target> <taunt_idx>"
-												: "%t: sm_taunt_force [<target> <taunt_idx>]", 
+												: "%t: sm_taunt_force [<target> <taunt_idx>]",
 		PLUGIN_SHORT_NAME ... "__commands__Usage");
 	}
 	return Plugin_Handled;
@@ -257,15 +267,15 @@ public Action Command_ForceOtherToTaunt(int i_client, int i_args)
 bool MenuMaker_TauntsMenu(int i_client, MenuHandler f_handler, any a_data = 0)
 {
 	TFClassType i_class =  TF2_GetPlayerClass(i_client);
-	
+
 	Menu h_menu = CreateMenu(f_handler);
-	
+
 	SetMenuTitle(h_menu, "%T", PLUGIN_SHORT_NAME ... "__menu__title", i_client);
-	
+
 	AddTauntsByClassToMenu(h_menu, i_class, gh_cache, true);
 	AddTauntsByClassToMenu(h_menu, TFClass_Unknown, gh_cache, false);
 	AddDataToMenuAsInvisibleItem(h_menu, a_data);
-	
+
 	return DisplayMenu(h_menu, i_client, MENU_TIME_FOREVER);
 }
 
@@ -275,7 +285,7 @@ public int MenuHandler_TauntsSelfMenu(Menu h_menu, MenuAction i_action, int i_pa
 	{
 		CloseHandle(h_menu);
 	}
-	
+
 	if(i_action == MenuAction_Select)
 	{
 		int i_taunt_idx = GetSelectedTauntIDXFromMenu(h_menu, i_param2);
@@ -289,13 +299,13 @@ bool MenuMaker_TauntOther_SelectTaunt(int i_client)
 	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTaunt);
 	SetMenuTitle(h_menu, "%T:", PLUGIN_SHORT_NAME ... "__taunt_force_menu__TauntsTitle", i_client);
 	SetMenuExitBackButton(h_menu, false);
-	
+
 	AddTauntsByClassToMenu(h_menu, TFClass_Unknown, gh_cache, false);
 	for (TFClassType i_class = view_as<TFClassType>(1); i_class < TFClassType; i_class++)
 	{
 		AddTauntsByClassToMenu(h_menu, i_class, gh_cache, true);
 	}
-	
+
 	return h_menu.Display(i_client, MENU_TIME_FOREVER);
 }
 
@@ -305,7 +315,7 @@ public int MenuHandler_TauntOther_SelectTaunt(Menu h_menu, MenuAction i_action, 
 	{
 		case MenuAction_Select:
 		{
-			MenuMaker_TauntOther_SelectTarget(	i_param1,  
+			MenuMaker_TauntOther_SelectTarget(	i_param1,
 												GetSelectedTauntIDXFromMenu(h_menu, i_param2));
 		}
 		case MenuAction_End:
@@ -319,19 +329,19 @@ bool MenuMaker_TauntOther_SelectTarget(int i_client, int i_idx)
 {
 	ArrayList h_data = CreateArray();
 	h_data.Push(i_idx);
-	
+
 	Menu h_menu = CreateMenu(MenuHandler_TauntOther_SelectTarget);
 	SetMenuTitle(h_menu, "%T:", PLUGIN_SHORT_NAME ... "__taunt_force_menu__TargetsTitle", i_client);
 	SetMenuExitBackButton(h_menu, true);
-	
+
 	AddFormattedMenuItem(	h_menu,
-							gs_target_symbols[TargetSymbol_All], 
-							ITEMDRAW_DEFAULT, 
+							gs_target_symbols[TargetSymbol_All],
+							ITEMDRAW_DEFAULT,
 							"%T", gs_target_symbols_ml[TargetSymbol_All], i_client);
 	AddForcedTauntTargetsToMenu(h_menu, i_client, i_idx, gh_cache);
-	
+
 	AddDataToMenuAsInvisibleItem(h_menu, h_data);
-	
+
 	return h_menu.Display(i_client, MENU_TIME_FOREVER);
 }
 
@@ -343,24 +353,24 @@ public int MenuHandler_TauntOther_SelectTarget(Menu h_menu, MenuAction i_action,
 		{
 			ArrayList h_data = GetDataFromInvisibleMenuItem(h_menu);
 			int i_idx = h_data.Get(0);
-			
+
 			char s_target_name[MAX_TARGET_LENGTH];
-			
+
 			int i_target_count = 0;
 			bool b_tn_is_ml;
-			int[] i_targets = new int[MaxClients]; 
+			int[] i_targets = new int[MaxClients];
 			bool[] b_hits = new bool[MaxClients];
-			
+
 			char s_info[MAX_TARGET_SYMBOL_LENGTH + INT_DEC_LENGTH];
-			
+
 			GetMenuItem(h_menu, i_param2, s_info, sizeof(s_info));
-			
+
 			TargetSymbol i_target_symbol = ParseTargetSymbol(s_info);
 			if (i_target_symbol == TargetSymbol_All)
 			{
 				b_tn_is_ml = true;
 				strcopy(s_target_name, sizeof(s_target_name), gs_target_symbols_ml[i_target_symbol]);
-				
+
 				i_target_count = FindValidTauntTargets(i_param1, i_targets, MaxClients, i_idx, gh_cache);
 				if (i_target_count < 1)
 				{
@@ -378,7 +388,7 @@ public int MenuHandler_TauntOther_SelectTarget(Menu h_menu, MenuAction i_action,
 				GetClientName(i_targets[0], s_target_name, sizeof(s_target_name));
 				b_hits[0] = gh_enforcer.ForceTaunt(i_targets[0], i_idx);
 			} else { return 0; } //unsupported target symbol
-			
+
 			Notify_ForceTaunt(i_param1, i_idx, b_tn_is_ml, s_target_name, i_targets, b_hits, i_target_count, gh_cache);
 			MenuMaker_TauntOther_SelectTarget(i_param1, i_idx);
 		}
