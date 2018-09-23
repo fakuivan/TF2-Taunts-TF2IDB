@@ -28,8 +28,8 @@ native int RegisterTauntEnforcer(ForceTaunt func, ForceTauntMultiple funcm);
 
 stock void ActivateForwards()
 {
-	g_hForceTaunt = CreateForward(ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
-	g_hForceTauntMultiple = CreateForward(ET_Ignore, Param_Array, Param_Array, Param_Cell, Param_Cell, Param_Cell);
+	g_hForceTaunt = CreateForward(ET_Single, Param_Cell, Param_Cell, Param_Cell);
+	g_hForceTauntMultiple = CreateForward(ET_Single, Param_Array, Param_Array, Param_Cell, Param_Cell, Param_Cell);
 }
 
 public int Native_RegisterTauntEnforcer(Handle plugin, int numParams)
