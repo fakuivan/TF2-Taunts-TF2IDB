@@ -70,15 +70,15 @@ methodmap CTauntEnforcer < Handle {
 		PrepSDKCall_SetReturnInfo(SDKType_Bool, SDKPass_Plain);
 		return view_as<CTauntEnforcer>(EndPrepSDKCall());
 	}
-
+	
 	public bool CBasePlayer_PlayTauntSceneFromItem(int i_client, Address i_pointer)
 	{
 		return SDKCall(this, i_client, i_pointer);
 	}
-
+	
 	property Handle m_hBaseTauntItem
 	{
-		public get()
+		public get() 
 		{
 			static Handle h_item;
 			if (h_item == INVALID_HANDLE)
@@ -91,18 +91,18 @@ methodmap CTauntEnforcer < Handle {
 			return h_item;
 		}
 	}
-
+	
 	public static void MakeCEconViewItem(int i_defindex, int i_particle_id = 0)
 	{
 		//since the getter for ``m_hBaseTauntItem`` won't reference ``this``
 		CTauntEnforcer i_null_instance = view_as<CTauntEnforcer>(null);
 		Handle h_item = i_null_instance.m_hBaseTauntItem;
-
+		
 		TF2Items_SetItemIndex(h_item, i_defindex);
 		TF2Items_SetNumAttributes(h_item, i_particle_id ? 1 : 0);
 		if (i_particle_id) { TF2Items_SetAttribute(h_item, 0, 2041, float(i_particle_id)); }
 	}
-
+	
 	public bool ForceTaunt(int i_client, int i_defindex, int i_particle_id = 0)
 	{
 		if(GetForwardFunctionCount(g_hForceTaunt) != 0)
@@ -135,7 +135,7 @@ methodmap CTauntEnforcer < Handle {
 			return b_success;
 		}
 	}
-
+	
 	public int ForceTauntMultiple(const int[] i_targets, bool[] b_success, int i_nof_targets, int i_defindex, int i_particle_id = 0)
 	{
 		if(GetForwardFunctionCount(g_hForceTauntMultiple) != 0)
@@ -178,7 +178,7 @@ methodmap CTauntEnforcer < Handle {
 			return i_hits;
 		}
 	}
-
+	
 	public int ForceTauntMultipleFiltered(const int[] i_targets, bool[] b_success, int i_nof_targets, int i_defindex, TauntMultipleFilter f_filter, int i_particle_id = 0)
 	{
 		CTauntEnforcer.MakeCEconViewItem(i_defindex, i_particle_id);
@@ -189,12 +189,12 @@ methodmap CTauntEnforcer < Handle {
 			return 0;
 			//:TODO: Add error checks
 		}
-
+		
 		Address i_pointer = GetEntityAddress(i_ent_index) + view_as<Address>(FindSendPropInfo("CTFWearable", "m_Item"));
-
+		
 		int i_hits = 0;
 		bool b_continue;
-
+		
 		for (int i_iter = 0; i_iter < i_nof_targets; i_iter++)
 		{
 			Call_StartFunction(INVALID_HANDLE, f_filter);
@@ -206,7 +206,7 @@ methodmap CTauntEnforcer < Handle {
 			}
 			if (b_success[i_iter]) { i_hits++; }
 		}
-
+		
 		AcceptEntityInput(i_ent_index, "Kill");
 		return i_hits;
 	}
