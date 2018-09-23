@@ -315,7 +315,7 @@ public int MenuHandler_TauntOther_SelectTaunt(Menu h_menu, MenuAction i_action, 
 	{
 		case MenuAction_Select:
 		{
-			MenuMaker_TauntOther_SelectTarget(	i_param1, 
+			MenuMaker_TauntOther_SelectTarget(	i_param1,  
 												GetSelectedTauntIDXFromMenu(h_menu, i_param2));
 		}
 		case MenuAction_End:
