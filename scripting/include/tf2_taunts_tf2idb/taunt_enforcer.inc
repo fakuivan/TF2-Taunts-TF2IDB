@@ -41,7 +41,11 @@ public int Native_RegisterTauntEnforcer(Handle plugin, int numParams)
 		if(!AddToForward(g_hForceTaunt, plugin, GetNativeFunction(1)))
 			return 0;
 	}
-	else ThrowNativeError(SP_ERROR_NATIVE, "Another plugin is already enforcing taunts, bud.");
+	else 
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Another plugin is already enforcing taunts, bud.");
+		return 0;
+	}
 	
 	if(GetForwardFunctionCount(g_hForceTauntMultiple) == 0)
 	{
@@ -50,7 +54,11 @@ public int Native_RegisterTauntEnforcer(Handle plugin, int numParams)
 		else
 			return 0;
 	}
-	else ThrowNativeError(SP_ERROR_NATIVE, "Another plugin is already enforcing taunts, bud.");
+	else 
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Another plugin is already enforcing taunts, bud.");
+		return 0;
+	}
 }
 
 methodmap CTauntEnforcer < Handle {
