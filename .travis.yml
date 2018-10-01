@@ -40,10 +40,10 @@ install:
     - COMPILE_SOURCEMOD_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod"
     - COMPILE_SCRIPTING_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod/scripting"
     
-    - wget https://raw.githubusercontent.com/asherkin/TF2Items/master/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
-    - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/master/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
-    - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/master/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
-    - wget https://bitbucket.org/GoD_Tony/updater/raw/default/include/updater.inc -O $COMPILE_SCRIPTING_FOLDER/include/updater.inc
+    - wget https://raw.githubusercontent.com/asherkin/TF2Items/d81b0ff7e98b197431ff13f1a16a6989c5ae2032/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
+    - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/5db9765ea8cb6c6c32276b08fdb2d8c13385b067/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
+    - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/c2bc42e34c2a2e9a4e9ad0d0fe8cda564e970bb6/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
+    - wget https://bitbucket.org/GoD_Tony/updater/raw/12181277db77d6117052b8ddf5810c7681745156/include/updater.inc -O $COMPILE_SCRIPTING_FOLDER/include/updater.inc
     
     - COMMIT_NUMBER=$(git rev-list --count HEAD)
     - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
