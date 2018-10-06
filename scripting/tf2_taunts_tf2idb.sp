@@ -116,6 +116,8 @@ public void OnAllPluginsLoaded()
 	
 	if (gi_initialization == InitializationStatus_Success)
 	{
+		ActivateForwards();
+		
 		LoadTranslations("common.phrases");
 		LoadTranslations("tf2.taunts.tf2idb");
 		
@@ -126,6 +128,14 @@ public void OnAllPluginsLoaded()
 		RegAdminCmd("sm_taunts_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
 		RegAdminCmd("sm_taunt_force", Command_ForceOtherToTaunt, ADMFLAG_KICK, "Forces a player to taunt");
 	}
+}
+
+public APLRes AskPluginLoad2(Handle plugin, bool late, char[] error, int err_max)
+{
+	RegPluginLibrary("tf2_taunts_tf2idb");
+	CreateNative("RegisterTauntEnforcer", Native_RegisterTauntEnforcer);
+
+	return APLRes_Success;
 }
 
 public void OnLibraryAdded(const char[] s_name)
