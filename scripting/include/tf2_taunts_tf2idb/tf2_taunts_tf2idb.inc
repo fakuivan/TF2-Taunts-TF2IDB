@@ -111,13 +111,13 @@ stock void ReplyToTauntTargetOther(int i_target, TauntExecution i_result)
 	}
 }
 
-stock void Notify_ForceTaunt(	int i_client, 
-								int i_idx, 
-								bool b_tn_is_ml, 
+stock void Notify_ForceTaunt(	int i_client,
+								int i_idx,
+								bool b_tn_is_ml,
 								const char[] s_target_name,
-								const int[] i_target_list, 
-								const bool[] b_success, 
-								int i_nof_targets, 
+								const int[] i_target_list,
+								const bool[] b_success,
+								int i_nof_targets,
 								CTauntCacheSystem h_cache)
 {
 	CTauntInfo i_taunt = CTauntInfo(i_idx, h_cache);
@@ -128,18 +128,18 @@ stock void Notify_ForceTaunt(	int i_client,
 	{
 		if (b_success[i_iter])
 		{
-			LogAction(	i_client, i_target_list[i_iter], 
-						"%T", PLUGIN_SHORT_NAME ... "__taunt_force__LogAction", LANG_SERVER, i_client, 
-																				i_target_list[i_iter], 
+			LogAction(	i_client, i_target_list[i_iter],
+						"%T", PLUGIN_SHORT_NAME ... "__taunt_force__LogAction", LANG_SERVER, i_client,
+																				i_target_list[i_iter],
 																				i_idx);
 			i_hits++;
 		}
 	}
-	
+
 	if (i_nof_targets > 1)
 	{
 		ShowActivity2(i_client, "[SM] ", "%t", b_tn_is_ml 	? PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
-															: PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulMultiple", 
+															: PLUGIN_SHORT_NAME ... "__taunt_force__ShowActivity_TauntSuccessfulMultiple",
 															s_target_name, i_hits, i_nof_targets, s_taunt_name);
 	}
 	else
@@ -195,7 +195,7 @@ stock TauntExecution CheckClassToo(int i_target, int i_idx, CTauntCacheSystem h_
 {
 	TauntExecution i_check_only_result;
 	if ((i_check_only_result = CheckOnly(i_target, i_class)) != TauntExecution_Success) { return i_check_only_result; }
-	
+
 	CTauntInfo i_taunt = CTauntInfo(i_idx);
 	if (i_taunt != INVALID_TAUNT)
 	{
@@ -218,7 +218,7 @@ stock TauntExecution CheckAndTaunt(int i_target, int i_idx, CTauntEnforcer h_enf
 {
 	TauntExecution i_check_only_result;
 	if ((i_check_only_result = CheckClassToo(i_target, i_idx, h_taunts, i_class)) != TauntExecution_Success) { return i_check_only_result; }
-	
+
 	if (h_enforcer.ForceTaunt(i_target, i_idx))
 	{
 		return TauntExecution_Success;
@@ -283,20 +283,37 @@ stock any GetDataFromInvisibleMenuItem(Handle h_menu, bool b_last_position = tru
 	return view_as<any>(StringToInt(s_data, 16));
 }
 
-stock void AddTauntsByClassToMenu(Handle h_menu, TFClassType i_class, CTauntCacheSystem h_taunts, bool b_specify_class)
+stock void AddTauntsByClassToMenu(Handle hMenu, TFClassType iClass, CTauntCacheSystem hTaunts, bool bSpecifyClass, int iClient)
 {
-	char[] s_name = new char[h_taunts.m_iMaxNameLength];
-	char s_hex_idx[INT_HEX_LENGTH];
-	char s_class[TF_MAX_CLASS_NAME_LENGTH];
-	if (b_specify_class) { TF2_ClassEnumToString(i_class, s_class); }
-	
-	ArrayList h_taunt_list = (i_class == TFClass_Unknown) ? h_taunts.m_hAllClassTaunts : h_taunts.GetListForClass(i_class);
-	for (int i_iter = 0; i_iter < GetArraySize(h_taunt_list); i_iter++)
-	{
-		CTauntInfo i_taunt = GetArrayCell(h_taunt_list, i_iter);
-		i_taunt.GetName(s_name, h_taunts.m_iMaxNameLength, h_taunts);
-		Format(s_hex_idx, sizeof(s_hex_idx), "%x", i_taunt.GetIDX(h_taunts));
-		AddFormattedMenuItem(h_menu, s_hex_idx, ITEMDRAW_DEFAULT, b_specify_class ? "%s (%s)" : "%s" , s_name, s_class);
+	int iLength = hTaunts.m_iMaxNameLength + TF_MAX_CLASS_NAME_LENGTH;
+	char sClass[TF_MAX_CLASS_NAME_LENGTH];
+	if (bSpecifyClass)
+		TF2_ClassEnumToString(iClass, sClass, sizeof(sClass));
+
+	ArrayList hTauntList = (iClass == TFClass_Unknown) ? hTaunts.m_hAllClassTaunts : hTaunts.GetListForClass(iClass);
+	int iSize = hTauntList.Length;
+	for (int i = 0; i < iSize; i++) {
+		CTauntInfo iTaunt = hTauntList.Get(i);
+		int iIDX = iTaunt.GetIDX(hTaunts);
+
+		char[] sName = new char[iLength];
+		char sHEX[INT_HEX_LENGTH];
+		FormatEx(sHEX, sizeof(sHEX), "%x", iIDX);
+
+		char sPhrase[64];
+		FormatEx(sPhrase, sizeof(sPhrase), "tf2_taunt_tf2idb__taunts_list__%i", iIDX);
+		//PrintToChat(iClient, "Taunt TR: %s", sPhrase);
+		if (TranslationPhraseExists(sPhrase))
+			FormatEx(sName, iLength, "%T", sPhrase, iClient);
+		else iTaunt.GetName(sName, iLength, hTaunts);
+
+		if (bSpecifyClass) {
+			char sFClass[36 + TF_MAX_CLASS_NAME_LENGTH];
+			FormatEx(sFClass, sizeof(sFClass), "tf2_taunt_tf2idb__taunts_list__%s", sClass);
+			Format(sName, iLength, "(%T) %s", sFClass, iClient, sName);
+		}
+
+		AddFormattedMenuItem(hMenu, sHEX, ITEMDRAW_DEFAULT, sName);
 	}
 }
 
@@ -305,7 +322,7 @@ stock void AddForcedTauntTargetsToMenu(Handle h_menu, int i_client, int i_idx, C
 	char s_id[INT_DEC_LENGTH];
 	int[] i_valid_targets = new int[MaxClients];
 	int i_hits = FindValidTauntTargets(i_client, i_valid_targets, MaxClients, i_idx, h_cache);
-	
+
 	for (int i_iter = 0; i_iter < i_hits; i_iter++)
 	{
 		int i_uid = GetClientUserId(i_valid_targets[i_iter]);

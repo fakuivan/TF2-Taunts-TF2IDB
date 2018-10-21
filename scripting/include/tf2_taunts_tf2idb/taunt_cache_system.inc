@@ -99,7 +99,7 @@ methodmap CTauntCacheSystem < ArrayList {
 			CloseHandle(h_idxs);
 			return INVALID_TAUNT_CACHE_SYS;
 		}
-		int i_name_maxlength = GetArrayCell(h_name_maxlength, 0); CloseHandle(h_name_maxlength);
+		int i_name_maxlength = GetArrayCell(h_name_maxlength, 0) * 2; CloseHandle(h_name_maxlength);
 		
 		int[] i_idxs = new int[i_nof_items];
 		ArrayListOfIntsToIntArray(h_idxs, i_idxs);
