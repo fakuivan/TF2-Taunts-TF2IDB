@@ -3,63 +3,414 @@
 	"tf2_taunts_tf2idb__menu__title"
 	{
 		"en"		"Taunts:"
+		"ru"			"Насмешки:"
 	}
-    
+
 	"tf2_taunts_tf2idb__schema__Reply_NotCached"
 	{
 		"en"		"Item schema cache not loaded yet, try again later."
+		"ru"			"Кэш схемы предметов ещё не загружен, попробуйте снова позже."
 	}
 
 	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
 	{
 		"en"		"Taunts"
+		"ru"			"Насмешки"
 	}
 	"tf2_taunts_tf2idb__taunts_list__TauntsForClassX"
 	{
 		"en"		"Taunts for class %s"
+		"ru"			"Насмешки для класса %s"
 	}
 	"tf2_taunts_tf2idb__taunts_list__TauntsForAllClasses"
 	{
 		"en"		"All Class taunts"
+		"ru"			"Насмешки для всех классов"
 	}
 	"tf2_taunts_tf2idb__taunts_list__AllClass"
 	{
 		"en"		"All Class"
+		"ru"			"Все классы"
 	}
-    
+
+	"tf2_taunt_tf2idb__taunts_list__167"
+	{
+		"en"		"High Five!"
+		"ru"			"Дай пять!"
+	}
+	"tf2_taunt_tf2idb__taunts_list__438"
+	{
+		"en"		"Director's Vision"
+		"ru"			"Взгляд режиссёра"
+	}
+	"tf2_taunt_tf2idb__taunts_list__463"
+	{
+		"en"		"Schadenfreude"
+		"ru"			"Злорадство"
+	}
+	"tf2_taunt_tf2idb__taunts_list__477"
+	{
+		"en"		"Meet the Medic!"
+		"ru"			"Знакомьтесь, Медик!"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1015"
+	{
+		"en"		"Shred Alert"
+		"ru"			"Боевой запил"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1106"
+	{
+		"en"		"Square Dance"
+		"ru"			"Кадриль"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1107"
+	{
+		"en"		"Flippin' Awesome"
+		"ru"			"Крутой кувырок"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1108"
+	{
+		"en"		"Buy A Life"
+		"ru"			"Займись делом"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1109"
+	{
+		"en"		"Results Are In"
+		"ru"			"Диагноз налицо"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1110"
+	{
+		"en"		"Rock, Paper, Scissors"
+		"ru"			"Камень, ножницы, бумага"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1111"
+	{
+		"en"		"Skullcracker"
+		"ru"			"Головоломка"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1112"
+	{
+		"en"		"Party Trick"
+		"ru"			"Фокус для вечеринки"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1113"
+	{
+		"en"		"Fresh Brewed Victory"
+		"ru"			"Свежесваренная победа"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1114"
+	{
+		"en"		"Spent Well Spirits"
+		"ru"			"Правильная разрядка"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1115"
+	{
+		"en"		"Rancho Relaxo"
+		"ru"			"Ранчо релаксо"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1116"
+	{
+		"en"		"I See You"
+		"ru"			"Я тебя вижу"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1117"
+	{
+		"en"		"Battin' a Thousand"
+		"ru"			"Один против тысячи"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1118"
+	{
+		"en"		"Conga"
+		"ru"			"Конга"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1119"
+	{
+		"en"		"Deep Fried Desire"
+		"ru"			"Хорошо прожаренная страсть"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1120"
+	{
+		"en"		"Oblooterated"
+		"ru"			"Трата сокровищ"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1157"
+	{
+		"en"		"Kazotsky Kick"
+		"ru"			"Вприсядку"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1162"
+	{
+		"en"		"Mannrobics"
+		"ru"			"Маннробика"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1168"
+	{
+		"en"		"Carlton"
+		"ru"			"Карлтон"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1172"
+	{
+		"en"		"Victory Lap"
+		"ru"			"Круг почёта"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1174"
+	{
+		"en"		"Table Tantrum"
+		"ru"			"Порыв ярости"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1175"
+	{
+		"en"		"Boiling Point"
+		"ru"			"Точка кипения"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1182"
+	{
+		"en"		"Yeti Punch"
+		"ru"			"Удар в Йети"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1183"
+	{
+		"en"		"Yeti Smash"
+		"ru"			"Йети, крушить!"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1196"
+	{
+		"en"		"Panzer Pants"
+		"ru"			"Танковые штаны"
+	}
+	"tf2_taunt_tf2idb__taunts_list__1197"
+	{
+		"en"		"The Scooty Scoot"
+		"ru"			"Поспешное бегство"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30570"
+	{
+		"en"		"Pool Party"
+		"ru"			"Вечеринка в бассейне"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30572"
+	{
+		"en"		"Boston Breakdance"
+		"ru"			"Бостонский брейк"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30609"
+	{
+		"en"		"Killer Solo"
+		"ru"			"Убийственное соло"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30614"
+	{
+		"en"		"Most Wanted"
+		"ru"			"Особо опасен"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30615"
+	{
+		"en"		"Boxtrot"
+		"ru"			"Короботрот"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30616"
+	{
+		"en"		"Proletariat Posedown"
+		"ru"			"Мощь пролетариата"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30618"
+	{
+		"en"		"Bucking Bronco"
+		"ru"			"Необузданный бычок"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30621"
+	{
+		"en"		"Burstchester"
+		"ru"			"Грудолом"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30671"
+	{
+		"en"		"Bad Pipes"
+		"ru"			"Плохолынка"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30672"
+	{
+		"en"		"Zoomin' Broom"
+		"ru"			"Улётные мётлы"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30673"
+	{
+		"en"		"Soldier's Requiem"
+		"ru"			"Солдатская скорбь"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30761"
+	{
+		"en"		"Fubar Fanfare"
+		"ru"			"Фубарная фанфара"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30762"
+	{
+		"en"		"Disco Fever"
+		"ru"			"Лихорадная диско"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30763"
+	{
+		"en"		"Balloonibouncer"
+		"ru"			"Воздушный попрыгун"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30816"
+	{
+		"en"		"Second Rate Sorcery"
+		"ru"			"Второй курс колдовства"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30839"
+	{
+		"en"		"Didgeridrongo"
+		"ru"			"Мистер Снайпец"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30840"
+	{
+		"en"		"Scotsmann's Stagger"
+		"ru"			"Ошеломляющий шотландец"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30842"
+	{
+		"en"		"Dueling Banjo"
+		"ru"			"Дуэль Банджо"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30843"
+	{
+		"en"		"Russian Arms Race"
+		"ru"			"Советская гонка вооружения"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30844"
+	{
+		"en"		"Soviet Strongarm"
+		"ru"			"Советское применение силы"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30845"
+	{
+		"en"		"Jumping Jack"
+		"ru"			"Прыгающий Джек"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30876"
+	{
+		"en"		"Headcase"
+		"ru"			"Тяжёлый случай"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30917"
+	{
+		"en"		"Trackman's Touchdown"
+		"ru"			"Гол легкоатлета"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30918"
+	{
+		"en"		"Surgeon's Squeezebox"
+		"ru"			"Гармоника хирурга"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30919"
+	{
+		"en"		"Skating Scorcher"
+		"ru"			"Конькобежный лихач"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30920"
+	{
+		"en"		"Bunnyhopper"
+		"ru"			"Попрыгунчик"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30921"
+	{
+		"en"		"Runner's Rhythm"
+		"ru"			"Ритм бегуна"
+	}
+	"tf2_taunt_tf2idb__taunts_list__30922"
+	{
+		"en"		"Luxury Lounge"
+		"ru"			"Роскошное кресло"
+	}
+
+	"tf2_taunt_tf2idb__taunts_list__scout"
+	{
+		"en"		"Scout"
+		"ru"			"Разведчик"
+	}
+	"tf2_taunt_tf2idb__taunts_list__soldier"
+	{
+		"en"		"Soldier"
+		"ru"			"Солдат"
+	}
+	"tf2_taunt_tf2idb__taunts_list__pyro"
+	{
+		"en"		"Pyro"
+		"ru"			"Поджигатель"
+	}
+	"tf2_taunt_tf2idb__taunts_list__demoman"
+	{
+		"en"		"Demoman"
+		"ru"			"Подрывник"
+	}
+	"tf2_taunt_tf2idb__taunts_list__heavy"
+	{
+		"en"		"Heavy"
+		"ru"			"Пулемётчик"
+	}
+	"tf2_taunt_tf2idb__taunts_list__medic"
+	{
+		"en"		"Medic"
+		"ru"			"Медик"
+	}
+	"tf2_taunt_tf2idb__taunts_list__sniper"
+	{
+		"en"		"Sniper"
+		"ru"			"Снайпер"
+	}
+	"tf2_taunt_tf2idb__taunts_list__spy"
+	{
+		"en"		"Spy"
+		"ru"			"Шпион"
+	}
+	"tf2_taunt_tf2idb__taunts_list__engineer"
+	{
+		"en"		"Engineer"
+		"ru"			"Инженер"
+	}
+
 	"tf2_taunts_tf2idb__failed_to_target__InvalidClient"
 	{
 		"en"		"You can't taunt from the server console."
+		"ru"			"Вы не можете использовать насмешку серверной консолью."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned"
 	{
 		"en"		"Join a team to taunt."
+		"ru"			"Войдите в команду, чтобы использовать насмешку."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator"
 	{
 		"en"		"You can't taunt from team Spectator."
+		"ru"			"Вы не можете исп. насмешку в наблюдателях."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__InvalidClass"
 	{
 		"en"		"Join a class to taunt."
+		"ru"			"Выберите класс, чтобы использовать насмешку."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__TargetIsDead"
 	{
 		"en"		"You must be alive to taunt."
+		"ru"			"Вы должны быть в живых для исп. насмешки."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__WrongClass"
 	{
 		"en"		"Taunt not avaliable for this class."
+		"ru"			"Насмешка недоступна для этого класса."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__IvalidIDX"
 	{
 		"en"		"Not a valid Item Definition Index or item is not a taunt."
+		"ru"			"Неверный индекс предмета или предмет не является насмешкой."
 	}
 	"tf2_taunts_tf2idb__failed_to_target__TauntFailed"
 	{
 		"en"		"Failed to execute taunt."
+		"ru"			"Не удалось запустить насмешку."
 	}
-    
+
 	"tf2_taunts_tf2idb__failed_to_target_other__InvalidClient"
 	{
 		"en"		"You can't target the server console."
@@ -92,7 +443,7 @@
 	{
 		"en"		"Failed to execute taunt on target."
 	}
-    
+
 	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
 	{
 		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
@@ -102,39 +453,47 @@
 	{
 		"#format"	"{1:t},{2:s}" //translated target name, taunt name
 		"en"		"{1} is taunting \"{2}\"."
+		"ru"			"{1} использует насмешку \"{2}\"."
 	}
 	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple"
 	{
 		"#format"	"{1:s},{2:d},{3:d},{4:s}" //target name, hits, target count, taunt name
 		"en"		"{2}/{3} of {1} is taunting \"{4}\"."
+		"ru"			"{2}/{3} из {1}"
 	}
 	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular"
 	{
 		"#format"	"{1:s},{2:s}" //target name, taunt name
 		"en"		"{1} is taunting \"{2}\"."
+		"ru"			"{1} использует насмешку \"{2}\"."
 	}
 	"tf2_taunts_tf2idb__taunt_force__LogAction"
 	{
 		"#format"	"{1:L},{2:L},{3:d}" //admin, target, taunt idx
 		"en"		"\"{1}\" forced \"{2}\" to taunt (taunt_idx: {3})"
+		"ru"			"\"{1}\" заставил \"{2}\" использовать насмешку (taunt_idx: {3})"
 	}
-    
+
 	"tf2_taunts_tf2idb__commands__Usage"
 	{
 		"en"		"Usage"
+		"ru"			"Использование"
 	}
-    
+
 	"tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle"
 	{
 		"en"		"Select a taunt"
+		"ru"			"Выберите насмешку"
 	}
 	"tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle"
 	{
 		"en"		"Select a target"
+		"ru"			"Выберите цель"
 	}
-    
+
 	"tf2_taunts_tf2idb__TargetSymbols__@all"
 	{
 		"en"		"all players"
+		"ru"			"все игроки"
 	}
 }
