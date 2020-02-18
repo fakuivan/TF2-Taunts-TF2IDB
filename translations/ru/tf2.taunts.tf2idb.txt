@@ -1,0 +1,140 @@
+"Phrases"
+{
+	"tf2_taunts_tf2idb__menu__title"
+	{
+		"ru"		"Насмешки:"
+	}
+    
+	"tf2_taunts_tf2idb__schema__Reply_NotCached"
+	{
+		"ru"		"Кэш схемы насмешек еще не загружен, попробуйте позже."
+	}
+
+	"tf2_taunts_tf2idb__taunts_list__ListOfTaunts"
+	{
+		"ru"		"Насмешки"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForClassX"
+	{
+		"ru"		"Насмешек для класса %s"
+	}
+	"tf2_taunts_tf2idb__taunts_list__TauntsForAllClasses"
+	{
+		"ru"		"Насмешки Всех Классов"
+	}
+	"tf2_taunts_tf2idb__taunts_list__AllClass"
+	{
+		"ru"		"Все Классы"
+	}
+    
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClient"
+	{
+		"ru"		"Вы не можете использовать насмешку из консоли сервера."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsUnassigned"
+	{
+		"ru"		"Присоединитесь к команде, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__ClientIsSpectator"
+	{
+		"ru"		"Вы не можете использовать насмешку из команды Наблюдателя."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__InvalidClass"
+	{
+		"ru"		"Выберите класс, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TargetIsDead"
+	{
+		"ru"		"Вы должны быть живы, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__WrongClass"
+	{
+		"ru"		"Насмешка недоступна для этого класса."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__IvalidIDX"
+	{
+		"ru"		"Недопустимый индекс предмета или предмет не является насмешкой."
+	}
+	"tf2_taunts_tf2idb__failed_to_target__TauntFailed"
+	{
+		"ru"		"Не удалось выполнить насмешку."
+	}
+    
+	"tf2_taunts_tf2idb__failed_to_target_other__InvalidClient"
+	{
+		"ru"		"Цель не может быть консолью сервера."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__ClientIsUnassigned"
+	{
+		"ru"		"Цель должна присоединиться к команде, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__ClientIsSpectator"
+	{
+		"ru"		"Цель не может использовать насмешку в команде Наблюдателя."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__InvalidClass"
+	{
+		"ru"		"Цель должна присоединиться к классу, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__TargetIsDead"
+	{
+		"ru"		"Цель должна быть живой, чтобы использовать насмешку."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__WrongClass"
+	{
+		"ru"		"Насмешка не доступна для класса цели."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__IvalidIDX"
+	{
+		"ru"		"Недопустимый индекс предмета или предмет не является насмешкой."
+	}
+	"tf2_taunts_tf2idb__failed_to_target_other__TauntFailed"
+	{
+		"ru"		"Не удалось выполнить насмешку над целью."
+	}
+    
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultipleML"
+	{
+		"#format"	"{1:t},{2:d},{3:d},{4:s}" //translated target name, hits, target count, taunt name
+		"ru"		"{2}/{3} из {1} используют насмешку \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingularML"
+	{
+		"#format"	"{1:t},{2:s}" //translated target name, taunt name
+		"ru"		"{1} использует насмешку \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulMultiple"
+	{
+		"#format"	"{1:s},{2:d},{3:d},{4:s}" //target name, hits, target count, taunt name
+		"ru"		"{2}/{3} из {1} используют насмешку \"{4}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__ShowActivity_TauntSuccessfulSingular"
+	{
+		"#format"	"{1:s},{2:s}" //target name, taunt name
+		"ru"		"{1} использует насмешку \"{2}\"."
+	}
+	"tf2_taunts_tf2idb__taunt_force__LogAction"
+	{
+		"#format"	"{1:L},{2:L},{3:d}" //admin, target, taunt idx
+		"ru"		"\"{1}\" заставил \"{2}\" использовать насмешку (taunt_idx: {3})"
+	}
+    
+	"tf2_taunts_tf2idb__commands__Usage"
+	{
+		"ru"		"Использование"
+	}
+    
+	"tf2_taunts_tf2idb__taunt_force_menu__TauntsTitle"
+	{
+		"ru"		"Выберите насмешку"
+	}
+	"tf2_taunts_tf2idb__taunt_force_menu__TargetsTitle"
+	{
+		"ru"		"Выберите цель"
+	}
+    
+	"tf2_taunts_tf2idb__TargetSymbols__@all"
+	{
+		"ru"		"все игроки"
+	}
+}
