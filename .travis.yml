@@ -19,105 +19,54 @@ env:
         - UPDATER_USER="fakuivan"
         - UPDATER_USER_NAME="$UPDATER_USER"
         - UPDATER_USER_EMAIL="$UPDATER_USER@gmail.com"
-        - URL="https://github.com/$UPDATER_USER/TF2-Taunts-TF2IDB"
-        #UPDATER_REPO_OAUTH
-        - secure: "WtXF+/fPglmoDnI1l0fGnUmC8zrYxaaHdpG3IwKD95o/hUnSk4L0kfFvxhqDIqmhZOAFpdERnmpo1IrdR/LoTO5htO+5qZ+fmaDh5He7EbaNAaafOVaDKJ4GTj+HPYah8gVodvkzKOOqi5fnGekaKa9Fv8G0WEDcikIJ59HQ6yaGx6Jh/ct7G7OfY1nGhvj5frSBGK4PiPvtuC8w1GOvzamRGAebQ7BZzHcr50TvA8WzsSb/wcPdhRKbb0Q85E0L6ndXVt7pTYtzhFq84LIQTCjYWV3126+fjehoCK8V4isFqwYcrISft6UTpEGJ7U2J4V7h7lvxuqOZG6+m+sKPm8QIsopeiHPLOin7X+ye50k/Hhdkw2YS+x4hQBYntW6loop0gfNxb7OCy+P3dZxmExlc2yH/lLX0rcPStdP7f0hcj4RT3yH4e467ZvW2UI0V0YlQvMUpQeOPEGLfTBw4zd2hdwY7WSjf8y0DN7ThZ2Rf62pIMTW3fBzp6NmVXaik7vd/ryvx0kmjih8HNxuO46SUfcMfpNyHwL2QRUbp1mPiVk2pJzaehhYGLRxI2z6XJ+3/+S/UzGWz/d+D8pvbWqKcNLLyh8B1el/nQ40OQQoQipWjudHRBryy4JcNDbDPKAqC7cW10AENTl1P8TOQAQsURyiHaISrhvRK53TX7PQ="
+        - PROJECT_REPO_URL="https://github.com/$UPDATER_USER/TF2-Taunts-TF2IDB"
     matrix:
-        - SMVERSION=1.8 CACHE_BUILDER=tf2idb
-        - SMVERSION=1.8 CACHE_BUILDER=tf2ii
-        - SMVERSION=1.9 CACHE_BUILDER=tf2idb
-        - SMVERSION=1.9 CACHE_BUILDER=tf2ii
+        - SM_VERSION=1.10 CACHE_BUILDER=tf2idb
+        - SM_VERSION=1.10 CACHE_BUILDER=tf2ii
+        - SM_VERSION=1.11 CACHE_BUILDER=tf2idb
+        - SM_VERSION=1.11 CACHE_BUILDER=tf2ii
 
 # Allow the experimental branch to fail
 matrix:
     fast_finish: true
     allow_failures:
-        - env: SMVERSION=1.9
+        - env: SM_VERSION=1.11
 
 install:
-    - wget --input-file=http://sourcemod.net/smdrop/$SMVERSION/sourcemod-latest-linux
-    - tar -xzf $(cat sourcemod-latest-linux)
-    - COMPILE_SOURCEMOD_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod"
-    - COMPILE_SCRIPTING_FOLDER="$TRAVIS_BUILD_DIR/addons/sourcemod/scripting"
-    
-    - wget https://raw.githubusercontent.com/asherkin/TF2Items/d81b0ff7e98b197431ff13f1a16a6989c5ae2032/pawn/tf2items.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2items.inc
-    - wget https://raw.githubusercontent.com/chauffer/tf2itemsinfo/5db9765ea8cb6c6c32276b08fdb2d8c13385b067/scripting/include/tf2itemsinfo.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2itemsinfo.inc
-    - wget https://raw.githubusercontent.com/FlaminSarge/tf2idb/c2bc42e34c2a2e9a4e9ad0d0fe8cda564e970bb6/scripting/include/tf2idb.inc -O $COMPILE_SCRIPTING_FOLDER/include/tf2idb.inc
-    - wget https://bitbucket.org/GoD_Tony/updater/raw/12181277db77d6117052b8ddf5810c7681745156/include/updater.inc -O $COMPILE_SCRIPTING_FOLDER/include/updater.inc
-    
-    - COMMIT_NUMBER=$(git rev-list --count HEAD)
-    - if [[ -z $TRAVIS_TAG ]]; then if git describe --tags; then TAG=$(git describe --tags); else TAG="_untagged_"; fi; else TAG="$TRAVIS_TAG"; fi
-    - VERSION="$TAG.$COMMIT_NUMBER-$CACHE_BUILDER"
+    - cd "$TRAVIS_BUILD_DIR"
+    - mkdir .smlib
+    - (cd .smlib/ && 
+      wget --input-file="http://sourcemod.net/smdrop/$SM_VERSION/sourcemod-latest-linux" && 
+      tar -xzf "$(cat sourcemod-latest-linux)")
+    - export SM_SCRIPTING_PATH=./.smlib/addons/sourcemod/scripting
+    - chmod +x "$SM_SCRIPTING_PATH/spcomp64"
+    - export GIT_COMMIT_NUMBER="$(git rev-list --count HEAD)"
+    - |
+      if [[ -z "$TRAVIS_TAG" ]]; then
+          GIT_TAG="$(git describe --tags || echo _untagged_)"
+      else
+          GIT_TAG="$TRAVIS_TAG";
+      fi
+      export GIT_TAG
 
 before_script:
-    #Tagged releases only count if this is the master branch, else only updater releases will be used
-    - if [ "$TRAVIS_BRANCH" = "$TAG" ]; then UPDATER_BRANCH='master'; else UPDATER_BRANCH="$TRAVIS_BRANCH"; fi
-    - if [ "$TRAVIS_BRANCH" = "updater" ]; then UPDATER_BRANCH='master'; fi
-    - PROJECT_SHORTNAME_COMPLETE="$PROJECT_SHORTNAME-$CACHE_BUILDER"
-    - UPDATER_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/tony_updater"
-    - VERSION_SCRIPTS_PATH="$TRAVIS_BUILD_DIR/.buildtools/versioning"
-    
-    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$UPDATER_BRANCH/$PROJECT_SHORTNAME_COMPLETE/updater.txt"
-    
-    - python3.5 "$VERSION_SCRIPTS_PATH/versioner.py" "$TRAVIS_BUILD_DIR" "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" "$TAG"
-    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_link_helper.py" --include_dir "$TRAVIS_BUILD_DIR/scripting/include/tf2_taunts_tf2idb" --url "$UPDATER_URL"
-    - chmod +x "$COMPILE_SCRIPTING_FOLDER/spcomp"
-    - cp -r "$TRAVIS_BUILD_DIR/scripting" "$COMPILE_SOURCEMOD_FOLDER"
-    - mkdir "$TRAVIS_BUILD_DIR/plugins"
-    - FILE=tf2_taunts_tf2idb-n$COMMIT_NUMBER-$CACHE_BUILDER.zip
-    - if [ "$CACHE_BUILDER" = "tf2ii" ]; then EXTRA_ARGS='_USE_TF2II_INSTEAD_OF_TF2IDB='; else EXTRA_ARGS=''; fi
+    - cd "$TRAVIS_BUILD_DIR"
+    - UPDATER_BRANCH="$TRAVIS_BRANCH"
+    # Tagged releases only count if this is the master branch, else only updater releases will be used
+    - '[[ "$TRAVIS_BRANCH" = "$GIT_TAG" ]] || [[ "$TRAVIS_BRANCH" = "updater" ]] && UPDATER_BRANCH="master"'
+    - UPDATER_PROJECT_DIRECTORY="$PROJECT_SHORTNAME-$CACHE_BUILDER"
+    - UPDATER_URL="https://raw.githubusercontent.com/$UPDATER_USER/$UPDATER_REPO/$UPDATER_BRANCH/$UPDATER_PROJECT_DIRECTORY/updater.txt"
+    - export UPDATER_URL UPDATER_NEWS_URL="$PROJECT_REPO_URL"
+    - '[[ "$CACHE_BUILDER" = "tf2ii" ]] && export PLUGIN_USE_TF2II=true'
 
-# And compile!
 script: 
-    - $COMPILE_SCRIPTING_FOLDER/spcomp $COMPILE_SCRIPTING_FOLDER/tf2_taunts_tf2idb.sp -o$TRAVIS_BUILD_DIR/plugins/tf2_taunts_tf2idb.smx $EXTRA_ARGS
+    - make all
 
 before_deploy:
-    - cd $TRAVIS_BUILD_DIR
-    - PACKAGE_DIRS[0]="./plugins/"
-    - PACKAGE_DIRS[1]="./scripting/" 
-    - PACKAGE_DIRS[2]="./translations/" 
-    - PACKAGE_DIRS[3]="./gamedata/" 
-    - zip -r $FILE ${PACKAGE_DIRS[*]}
-    
-    - PACKAGE_PATH="$TRAVIS_BUILD_DIR/.package_updater"
-    
-    - rm -rf "$PACKAGE_PATH/"
-    - mkdir "$PACKAGE_PATH/"
-    - cp -r ${PACKAGE_DIRS[*]} "$PACKAGE_PATH/"
-    - python3.5 "$UPDATER_SCRIPTS_PATH/updater_script_gen.py" --sm_path "$PACKAGE_PATH" --version "$VERSION" --notes "Version $VERSION is out!" "Go to $URL to see the changes" --output "$PACKAGE_PATH/updater.txt"
-    - chmod +x "$UPDATER_SCRIPTS_PATH/deploy.sh"
-
-deploy:
-    - provider: releases
-      api_key:
-          secure: cfmiJb0kZfusm8RU2CJmKvDQPByXPqA1YxKeGCOnJlXY55pvJwMB+iqGW5zmxAOfv4x9H4LAdUstc7TOnGtw06hqrOEPsUTIo58uZqnZbNI6VyhMajdTHrLe/FPLeUbPu4f4AVU9KuSgi/td+6yzXuyQ4ZjFJoZYwBWKAmNGKEv2QQgSIKA0/BxsAfSQEHkwJd27HrRjwWdvCIF7oEDf2TAFdYOt9CvAgj7ARsW4st6z7aRf9TmGb3yEUkTm3JkU/LIVK6t77+o4X7MVorgDD6f7QWIzyjVFg/A9tkYOK/xIn2TXj82y2cvEzQGT9aKsHWt/IHWnSJej6DvBwP+dZEVGQHvVn2GfEJXAyrT+jacPWpbC8FOddiw/SSQFfACI8s6F52koNpSDxJmeihPc0Kynk46o/fed/Vg5Mb+hKl8CNJvee5Izsxty+mYVQoK+aHrXZPyPbm4WbeL+chGoU3O36VbFvTXMA5fN+Ot4vwGsxutXbImva8IHYmW5LNT+2d1Z57sbGf0bgEjeozE8shHHQwHECVLRGIXmzYtoWFjvtmLbt2CC9vYjooKjQv7+wjGSrya2u61rWC8w2BaJnzdguXroU+0TaIdzdDrC85r9VttcvEOWNLROTf+7Fgxq/dAyvfyz3pw2Noh8zyr3RUrXfLWhCLagLoeZ93agNUY=
-      file: $FILE
-      skip_cleanup: true
-      on:
-          #only deploy for the stable branch
-          condition: $SMVERSION = 1.8
-          repo: fakuivan/TF2-Taunts-TF2IDB
-          branch: master
-          tags: true
-        
-    - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
-      skip_cleanup: true
-      on:
-          repo: fakuivan/TF2-Taunts-TF2IDB
-          branch: updater_test
-          condition: $SMVERSION = 1.8
-          tags: false
-        
-    - provider: script
-      script: '"$UPDATER_SCRIPTS_PATH/deploy.sh" "$PROJECT_SHORTNAME_COMPLETE" "$VERSION" "$UPDATER_REPO" "$UPDATER_USER" "$UPDATER_REPO_OAUTH" "$UPDATER_USER_NAME" "$UPDATER_USER_EMAIL" "$UPDATER_BRANCH"'
-      skip_cleanup: true
-      on:
-          repo: fakuivan/TF2-Taunts-TF2IDB
-          branch: updater
-          condition: $SMVERSION = 1.8
-          #one must only commit (rebase) this branch before making a tag to get coherent release versions
-          tags: false
+    - cd "$TRAVIS_BUILD_DIR"
+    - RELEASE_ARTIFACT="$TRAVIS_BUILD_DIR/tf2_taunts_tf2idb-n$GIT_COMMIT_NUMBER-$CACHE_BUILDER.zip"
+    - OUTPUT_DIR="$(make print-output-dir)"
+    - (cd "$OUTPUT_DIR" && zip -r "$RELEASE_ARTIFACT" .)
 
 # Notifications
 notifications:

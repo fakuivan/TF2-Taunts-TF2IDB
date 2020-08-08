@@ -8,9 +8,13 @@
  #define REQUIRE_PLUGIN
 #endif
 #include "tf2items.inc"
-#undef REQUIRE_PLUGIN
-#include <updater>
-#define REQUIRE_PLUGIN
+#tryinclude "tf2_taunts_tf2idb/updater_helpers.inc"
+#if defined UPDATER_ENABLED
+ #undef REQUIRE_PLUGIN
+ #include <updater>
+ #define REQUIRE_PLUGIN
+ #define UPDATE_URL	UPDATER_HELPER_URL
+#endif
 
 #include <sourcemod>
 #include <tf2_stocks>
@@ -23,13 +27,12 @@
 #include "tf2_taunts_tf2idb/taunt_cache_system.inc"
 #include "tf2_taunts_tf2idb/taunt_enforcer.inc"
 #include "tf2_taunts_tf2idb/tf2_extra_stocks.inc"
-#include "tf2_taunts_tf2idb/autoversioning.inc"
-#include "tf2_taunts_tf2idb/updater_helpers.inc"
 #include "tf2_taunts_tf2idb/target_symbols.inc"
 
 #include "tf2_taunts_tf2idb/tf2_taunts_tf2idb.inc"
 
-#if defined _autoversioning_included
+#tryinclude "tf2_taunts_tf2idb/autoversioning.inc"
+#if defined AUTOVERSIONING_ENABLED
  #define PLUGIN_VERSION	AUTOVERSIONING_TAG ... "." ... AUTOVERSIONING_COMMIT ... "-" ... _USING_ITEMS_HELPER
 #else
  #define PLUGIN_VERSION "1.6.3" ... "." ... "*" ... "-" ... _USING_ITEMS_HELPER
@@ -43,8 +46,6 @@ public Plugin myinfo =
 	version = PLUGIN_VERSION,
 	url = "https://forums.alliedmods.net/member.php?u=264797"
 };
-
-#define UPDATE_URL	UPDATER_HELPER_URL
 
 CTauntCacheSystem gh_cache;
 CTauntEnforcer gh_enforcer;
@@ -97,7 +98,7 @@ public void OnAllPluginsLoaded()
 	{
 		LogError("Unable to initialize CTauntEnforcer, gamedata files outdated.");
 	}
-	
+#if defined UPDATER_ENABLED
 	if (LibraryExists("updater"))
 	{
 		if (gi_initialization != InitializationStatus_Success)
@@ -111,6 +112,12 @@ public void OnAllPluginsLoaded()
 		LogError("Halting user interface initialization. Plugin loaded but updater not found.");
 		LogError("Try using the latest version from here https://github.com/fakuivan/TF2-Taunts-TF2IDB .");
 	}
+#else
+	if (gi_initialization != InitializationStatus_Success)
+	{
+		SetFailState("Failed to initialize plugin, check the logs for more information.");
+	}
+#endif
 	
 	CreateConVar("sm_" ... PLUGIN_SHORT_NAME ... "_version", PLUGIN_VERSION, "Version of TF2 Taunts TF2IDB", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 	
@@ -128,6 +135,7 @@ public void OnAllPluginsLoaded()
 	}
 }
 
+#if defined UPDATER_ENABLED
 public void OnLibraryAdded(const char[] s_name)
 {
 	if (StrEqual(s_name, "updater"))
@@ -135,6 +143,7 @@ public void OnLibraryAdded(const char[] s_name)
 		Updater_AddPlugin(UPDATE_URL);
 	}
 }
+#endif
 
 public Action Command_ListTaunts(int i_client, int i_args)
 {

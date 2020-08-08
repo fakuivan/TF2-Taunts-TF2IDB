@@ -1,3 +1,15 @@
 [submodule ".buildtools"]
 	path = .buildtools
 	url = https://github.com/fakuivan/sp_buildtools
+[submodule ".libs/tf2idb"]
+	path = .libs/tf2idb
+	url = https://github.com/FlaminSarge/tf2idb.git
+[submodule ".libs/tf2itemsinfo"]
+	path = .libs/tf2itemsinfo
+	url = https://github.com/chauffer/tf2itemsinfo.git
+[submodule ".libs/tf2items"]
+	path = .libs/tf2items
+	url = https://github.com/asherkin/TF2Items.git
+[submodule ".libs/updater"]
+	path = .libs/updater
+	url = https://github.com/fakuivan/Updater.git
